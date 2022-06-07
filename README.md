@@ -2,7 +2,7 @@
 
 ## Registry Module Download
 
-## Registry Browse
+## Registry UI
 
 ## GitHub Integration
 
