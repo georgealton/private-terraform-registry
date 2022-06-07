@@ -21,4 +21,7 @@ jobs:
           wget -q -O "awscliv2.zip" "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
           unzip -qq "awscliv2.zip"
           sudo ./aws/install --update
-      - run: aws cloudformation package --template template.yaml
+      - run: |
+          aws cloudformation package \
+            --template template.yaml \
+            --s3-bucket cf-templates-1491x2vk47ot9-eu-west-1
