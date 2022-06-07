@@ -5,8 +5,6 @@ on: [push]
 
 permissions:
   id-token: write
-  security-events: write
-  actions: read
   contents: read
 
 jobs:
@@ -19,5 +17,8 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::531249009620:role/Deploy
           aws-region: eu-west-1
-      - run: python -m pip install --user awscli
+      - run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
       - run: aws cloudformation package --template template.yaml
