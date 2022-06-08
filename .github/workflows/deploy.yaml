@@ -20,17 +20,9 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::531249009620:role/Deploy
           aws-region: eu-west-1
-      - run: |
-          wget -q -O "awscliv2.zip" "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
-          unzip -qq "awscliv2.zip"
-          sudo ./aws/install --update
-      - run: |
-          aws cloudformation package \
-            --template template.yaml \
-            --s3-bucket cf-templates-1491x2vk47ot9-eu-west-1 \
-            --output-template-file packaged-template.json
-      - run: |
-          aws cloudformation deploy \
-            --template-file packaged-template.json \
-            --stack-name private-terraform-registry \
-            --capabilities CAPABILITY_IAM
+      - name: AWS CLI Install
+        run: wget -q -O awscliv2.zip https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip && unzip -qq awscliv2.zip && ./aws/install --update
+      - name: CloudFormation Package
+        run: aws cloudformation package --template template.yaml --s3-bucket cf-templates-1491x2vk47ot9-eu-west-1 --output-template-file packaged-template.json
+      - name: CloudFormation Deploy
+        run: aws cloudformation deploy --template-file packaged-template.json --stack-name private-terraform-registry --capabilities CAPABILITY_IAM
