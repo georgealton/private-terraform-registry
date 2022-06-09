@@ -15,84 +15,104 @@ paths:
                 properties:
                   modules.v1:
                     type: string
+      x-amazon-apigateway-integration:
+        type: mock
+        httpMethod: GET
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode": 200
+            }
+        responses:
+          default:
+            statusCode: 200
+            responseTemplates:
+              application/json: |
+                {
+                    "modules.v1": "https://modules.example.com/v1/"
+                }
+  /{namespace}/{name}/{system}/versions:
+    get:
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                properties:
+                  modules:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        versions:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              version:
+                                type: string
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        type: AWS
+        uri: arn:${AWS::Partition}:apigateway:${AWS::Region}:dynamodb:action/GetItem
+        credentials:
+          Fn::GetAtt:
+            - Role
+            - Arn
+        requestTemplates:
+          application/json:
+            Fn::Sub:
+              - |
+                {
+                  "TableName": "${tableName}",
+                  "Key": {
+                    "pk": {
+                      "S": "A"
+                    },
+                    "sk": {
+                      "S": "B"
+                    }
+                  }
+                }
+              - { tableName: { Ref: DB } }
+        responses:
+          default:
+            statusCode: 200
 
-  # /{namespace}/{name}/{system}/versions:
-  #   get:
-  #     x-amazon-apigateway-integration:
-  #       httpMethod: POST
-  #       type: AWS
-  #       uri:
-  #         Fn::Sub: "arn:${AWS::Partition}:apigateway:${AWS::Region}:dynamodb:action/GetItem"
-  #       credentials:
-  #         Fn::GetAtt:
-  #           - Role
-  #           - Arn
-  #       requestTemplates:
-  #         application/json:
-  #           Fn::Sub:
-  #             - |-
-  #               {
-  #                 "TableName": "${tableName}",
-  #                 "Item": {
-  #                   "pk": {
-  #                     "S": "$context.namespace $context.name $context.system"
-  #                   },
-  #                   "sk": {
-  #                     "S": startswith("VERSION")
-  #                   }
-  #                 }
-  #               }
-  #             - { tableName: { Ref: DB } }
-  #     responses:
-  #       "200":
-  #         description: ""
-  #         content:
-  #           application/json:
-  #             schema:
-  #               properties:
-  #                 modules:
-  #                   type: array
-  #                   items:
-  #                     type: object
-  #                     properties:
-  #                       versions:
-  #                         type: array
-  #                         items:
-  #                           type: object
-  #                           properties:
-  #                             version:
-  #                               type: string
-
-  # /{namespace}/{name}/{system}/{version}/download:
-  #   get:
-  #     x-amazon-apigateway-integration:
-  #       httpMethod: POST
-  #       type: AWS
-  #       uri:
-  #         Fn::Sub: "arn:${AWS::Partition}:apigateway:${AWS::Region}:dynamodb:action/GetItem"
-  #       credentials:
-  #         Fn::GetAtt:
-  #           - Role
-  #           - Arn
-  #       requestTemplates:
-  #         application/json:
-  #           Fn::Sub:
-  #             - |-
-  #               {
-  #                 "TableName": "${tableName}",
-  #                 "Item": {
-  #                   "pk": {
-  #                     "S": "$input.path($.namespace) $context.name $context.system"
-  #                   },
-  #                   "sk": {
-  #                     "S": "VERSION $context.version"
-  #                   }
-  #                 }
-  #               }
-  #             - { tableName: { Ref: DB } }
-  #     responses:
-  #       description: ""
-  #       headers:
-  #         X-Terraform-Get:
-  #           schema:
-  #             type: string
+  /{namespace}/{name}/{system}/{version}/download:
+    get:
+      responses:
+        "200":
+          description: ""
+          headers:
+            X-Terraform-Get:
+              schema:
+                type: string
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        type: AWS
+        uri: arn:${AWS::Partition}:apigateway:${AWS::Region}:dynamodb:action/GetItem
+        credentials:
+          Fn::GetAtt:
+            - Role
+            - Arn
+        requestTemplates:
+          application/json:
+            Fn::Sub:
+              - |
+                {
+                  "TableName": "${tableName}",
+                  "Key": {
+                    "pk": {
+                      "S": "A"
+                    },
+                    "sk": {
+                      "S": "B"
+                    }
+                  }
+                }
+              - { tableName: { Ref: DB } }
+        responses:
+          default:
+            statusCode: 200
