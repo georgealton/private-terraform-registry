@@ -61,22 +61,19 @@ paths:
             - Role
             - Arn
         requestTemplates:
-          application/json:
-            Fn::Sub:
-              - |
-                #set($allParams = $input.params())
-                 {
-                   "TableName": "${tableName}",
-                   "Key": {
-                     "pk": {
-                       "S": "$util.escapeJavaScript($allParams.path.namespace)"
-                     },
-                     "sk": {
-                       "S": "$util.escapeJavaScript($allParams.path.name)"
-                     }
-                   }
-                 }
-              - { tableName: { Ref: DB } }
+          application/json: |
+            #set($allParams = $input.params())
+            {
+              "TableName": "$stageVariables.DB",
+              "Key": {
+                "pk": {
+                  "S": "$util.escapeJavaScript($allParams.path.namespace)"
+                },
+                "sk": {
+                  "S": "$util.escapeJavaScript($allParams.path.name)"
+                }
+              }
+            }
         responses:
           default:
             statusCode: 200
@@ -99,22 +96,19 @@ paths:
             - Role
             - Arn
         requestTemplates:
-          application/json:
-            Fn::Sub:
-              - |
-                #set($allParams = $input.params())
-                {
-                  "TableName": "${tableName}",
-                  "Key": {
-                    "pk": {
-                      "S": "$util.escapeJavaScript($allParams.path.namespace)"
-                    },
-                    "sk": {
-                      "S": "$util.escapeJavaScript($allParams.path.name)"
-                    }
-                  }
+          application/json: |
+            #set($allParams = $input.params())
+            {
+              "TableName": "$stageVariables.DB",
+              "Key": {
+                "pk": {
+                  "S": "$util.escapeJavaScript($allParams.path.namespace)"
+                },
+                "sk": {
+                  "S": "$util.escapeJavaScript($allParams.path.name)"
                 }
-              - { tableName: { Ref: DB } }
+              }
+            }
         responses:
           default:
             statusCode: 200

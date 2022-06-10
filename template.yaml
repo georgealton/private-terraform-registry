@@ -30,6 +30,8 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: main
+      Variables:
+        DB: !Ref DB
       DefinitionBody:
         'Fn::Transform':
           Name: AWS::Include
