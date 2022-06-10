@@ -64,17 +64,18 @@ paths:
           application/json:
             Fn::Sub:
               - |
-                {
-                  "TableName": "${tableName}",
-                  "Key": {
-                    "pk": {
-                      "S": "A"
-                    },
-                    "sk": {
-                      "S": "B"
-                    }
-                  }
-                }
+                #set($allParams = $input.params())
+                 {
+                   "TableName": "${tableName}",
+                   "Key": {
+                     "pk": {
+                       "S": "$util.escapeJavaScript($allParams.path.namespace)"
+                     },
+                     "sk": {
+                       "S": "$util.escapeJavaScript($allParams.path.name)"
+                     }
+                   }
+                 }
               - { tableName: { Ref: DB } }
         responses:
           default:
@@ -101,14 +102,15 @@ paths:
           application/json:
             Fn::Sub:
               - |
+                #set($allParams = $input.params())
                 {
                   "TableName": "${tableName}",
                   "Key": {
                     "pk": {
-                      "S": "A"
+                      "S": "$util.escapeJavaScript($allParams.path.namespace)"
                     },
                     "sk": {
-                      "S": "B"
+                      "S": "$util.escapeJavaScript($allParams.path.name)"
                     }
                   }
                 }
