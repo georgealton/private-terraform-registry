@@ -19,19 +19,15 @@ paths:
         type: mock
         httpMethod: GET
         requestTemplates:
-          application/json: |
-            {
-              "statusCode": 200
-            }
+          application/json: >-
+            {"statusCode": 200}
         responses:
-          default:
+          200:
             statusCode: 200
             responseTemplates:
-              application/json: |
-                {
-                    "modules.v1": "https://$context.domainName/terraform/modules/v1"
-                }
-  /terraform/modules/v1/{namespace}/{name}/{system}/versions:
+              application/json: >-
+                {"modules.v1": "https://$context.domainName/terraform/modules/v1"}
+  /terraform/modules/v1/{namespace}/{name}/{provider}/versions:
     get:
       responses:
         "200":
@@ -67,13 +63,21 @@ paths:
             #set($allParams = $input.params())
             #set($namespace = $util.escapeJavaScript($allParams.path.namespace))
             #set($name = $util.escapeJavaScript($allParams.path.name))
-            #set($system = $util.escapeJavaScript($allParams.path.system))
+            #set($provider = $util.escapeJavaScript($allParams.path.provider))
             {
               "TableName": "$stageVariables.DB",
-              "KeyConditionExpression": "pk = :pk",
+              "KeyConditionExpression": "#k0 = :v0 AND begins_with(#k1, :v1)",
+              "ScanIndexForward": false,
+              "ExpressionAttributeNames": {
+                "#k0": "pk",
+                "#k1": "sk"
+              },
               "ExpressionAttributeValues": {
-                ":pk": {
-                  "S": "#namespace${namespace}#name${name}#system${system}"
+                ":v0": {
+                  "S": "NAMESPACE#${namespace}#NAME#${name}#provider#${provider}"
+                },
+                ":v1": {
+                  "S": "VERSION#"
                 }
               }
             }
@@ -82,11 +86,11 @@ paths:
             statusCode: 200
             responseTemplates:
               application/json: >-
-                {"modules": [{"versions": [#foreach($version in $input.path('$.Items')){"version": "$version.sk.S"}#if( $foreach.hasNext ),#{end}#{end}]}]}
+                {"modules":[{"versions":[#foreach($item in $input.path('$.Items')){"version":"$item.data.M.version.S"}#if( $foreach.hasNext ),#{end}#{end}]}]}
           default:
             statusCode: 500
 
-  /terraform/modules/v1/{namespace}/{name}/{system}/{version}/download:
+  /terraform/modules/v1/{namespace}/{name}/{provider}/{version}/download:
     get:
       responses:
         "200":
@@ -106,14 +110,18 @@ paths:
         requestTemplates:
           application/json: |
             #set($allParams = $input.params())
-            {
+            #set($namespace = $util.escapeJavaScript($allParams.path.namespace))
+            #set($name = $util.escapeJavaScript($allParams.path.name))
+            #set($provider = $util.escapeJavaScript($allParams.path.provider))
+            #set($version = $util.escapeJavaScript($allParams.path.version))
+             {
               "TableName": "$stageVariables.DB",
               "Key": {
                 "pk": {
-                  "S": "$util.escapeJavaScript($allParams.path.namespace)"
+                  "S": "#NAMESPACE${namespace}#NAME${name}#provider${provider}"
                 },
                 "sk": {
-                  "S": "$util.escapeJavaScript($allParams.path.name)"
+                  "S": "VERSION${version}"
                 }
               }
             }
@@ -141,15 +149,8 @@ paths:
         type: mock
         httpMethod: GET
         requestTemplates:
-          application/json: |
-            {
-              "statusCode": 200
-            }
+          application/json: >-
+            {"statusCode": 200}
         responses:
           default:
             statusCode: 202
-            responseTemplates:
-              application/json: |
-                {
-                    "modules.v1": "https://modules.example.com/v1/"
-                }
