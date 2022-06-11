@@ -29,9 +29,9 @@ paths:
             responseTemplates:
               application/json: |
                 {
-                    "modules.v1": "https://modules.example.com/v1/"
+                    "modules.v1": "https://$context.domainName/terraform/modules/v1"
                 }
-  /{namespace}/{name}/{system}/versions:
+  /terraform/modules/v1/{namespace}/{name}/{system}/versions:
     get:
       responses:
         "200":
@@ -52,10 +52,12 @@ paths:
                             properties:
                               version:
                                 type: string
+        "404":
+          description: ""
       x-amazon-apigateway-integration:
         httpMethod: POST
         type: AWS
-        uri: arn:${AWS::Partition}:apigateway:${AWS::Region}:dynamodb:action/GetItem
+        uri: arn:${AWS::Partition}:apigateway:${AWS::Region}:dynamodb:action/Query
         credentials:
           Fn::GetAtt:
             - Role
@@ -63,22 +65,28 @@ paths:
         requestTemplates:
           application/json: |
             #set($allParams = $input.params())
+            #set($namespace = $util.escapeJavaScript($allParams.path.namespace))
+            #set($name = $util.escapeJavaScript($allParams.path.name))
+            #set($system = $util.escapeJavaScript($allParams.path.system))
             {
               "TableName": "$stageVariables.DB",
-              "Key": {
-                "pk": {
-                  "S": "$util.escapeJavaScript($allParams.path.namespace)"
-                },
-                "sk": {
-                  "S": "$util.escapeJavaScript($allParams.path.name)"
+              "KeyConditionExpression": "pk = :pk",
+              "ExpressionAttributeValues": {
+                ":pk": {
+                  "S": "#namespace${namespace}#name${name}#system${system}"
                 }
               }
             }
         responses:
-          default:
+          200:
             statusCode: 200
+            responseTemplates:
+              application/json: >-
+                {"modules": [{"versions": [#foreach($version in $input.path('$.Items')){"version": "$version.sk.S"}#if( $foreach.hasNext ),#{end}#{end}]}]}
+          default:
+            statusCode: 500
 
-  /{namespace}/{name}/{system}/{version}/download:
+  /terraform/modules/v1/{namespace}/{name}/{system}/{version}/download:
     get:
       responses:
         "200":
@@ -112,3 +120,36 @@ paths:
         responses:
           default:
             statusCode: 200
+
+  /webhooks/github:
+    post:
+      parameters:
+        - name: X-GitHub-Event
+          in: header
+        - name: X-GitHub-Delivery
+          in: header
+        - name: X-Hub-Signature
+          in: header
+        - name: X-Hub-Signature-256
+          in: header
+        - name: User-Agent
+          in: header
+      responses:
+        "202":
+          description: ""
+      x-amazon-apigateway-integration:
+        type: mock
+        httpMethod: GET
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode": 200
+            }
+        responses:
+          default:
+            statusCode: 202
+            responseTemplates:
+              application/json: |
+                {
+                    "modules.v1": "https://modules.example.com/v1/"
+                }
