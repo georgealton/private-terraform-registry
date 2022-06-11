@@ -4,6 +4,12 @@ Terraform 0.11 and above support [Private Module Registries][module-registry-pro
 
 https://www.terraform.io/cloud-docs/registry/publish-modules#publishing-private-modules-to-the-terraform-cloud-private-registry
 
+## OpenAPI
+
+use well known / hardcoded resource arns over imports
+- though breaks the dependency graph trade off is open api spec not coupled to CloudFormation
+
+
 ## Registry Protocol
 
 APIs for Terraform to download modules.
@@ -17,13 +23,13 @@ X-Terraform-Get: https://api.github.com/repos/hashicorp/terraform-aws-consul/tar
 
 ## DynamoDB Data
 
-Module Versions
+### Module Versions
 
-| pk                                  | sk              |
-| ----------------------------------- | --------------- |
-| `NAMESPACE#foo#NAME#bar#SYSTEM#aws` | `VERSION#1.0.0` |
-| `NAMESPACE#foo#NAME#bar#SYSTEM#aws` | `VERSION#1.0.1` |
-| `NAMESPACE#foo#NAME#baz#SYSTEM#aws` | `VERSION#1.0.1` |
+| pk                                  | sk              | data                                     |
+| ----------------------------------- | --------------- | ---------------------------------------- |
+| `NAMESPACE#foo#NAME#bar#SYSTEM#aws` | `VERSION#1.0.0` | {version: "1.0.0", url: "https://blah/"} |
+| `NAMESPACE#foo#NAME#bar#SYSTEM#aws` | `VERSION#1.0.1` | {version: "1.0.1", url: "https://blah/"} |
+| `NAMESPACE#foo#NAME#baz#SYSTEM#aws` | `VERSION#1.0.1` | {version: "1.0.1", url: "https://blah/"} |
 
 ## Registry API
 
