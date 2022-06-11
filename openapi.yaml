@@ -54,10 +54,7 @@ paths:
         httpMethod: POST
         type: AWS
         uri: arn:${AWS::Partition}:apigateway:${AWS::Region}:dynamodb:action/Query
-        credentials:
-          Fn::GetAtt:
-            - Role
-            - Arn
+        credentials: arn:${AWS::Partition}:iam::${AWS::AccountId}:role/DynamoDBAccess
         requestTemplates:
           application/json: |
             #set($allParams = $input.params())
@@ -103,10 +100,7 @@ paths:
         httpMethod: POST
         type: AWS
         uri: arn:${AWS::Partition}:apigateway:${AWS::Region}:dynamodb:action/GetItem
-        credentials:
-          Fn::GetAtt:
-            - Role
-            - Arn
+        credentials: arn:${AWS::Partition}:iam::${AWS::AccountId}:role/DynamoDBAccess
         requestTemplates:
           application/json: |
             #set($allParams = $input.params())

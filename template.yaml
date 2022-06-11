@@ -52,6 +52,8 @@ Resources:
           Value: TFRegistry
 
   API:
+    DependsOn:
+      - Role
     Type: AWS::Serverless::Api
     Properties:
       StageName: main
@@ -68,6 +70,7 @@ Resources:
   Role:
     Type: AWS::IAM::Role
     Properties:
+      RoleName: DynamoDBAccess
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
