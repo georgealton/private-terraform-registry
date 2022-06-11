@@ -29,6 +29,16 @@ Browse and Discover Terraform modules that exist in your registry.
 
 ## GitHub Integration
 
+- When installed
+  - create new namespace from Org name
+  - add all `terraform-` repositories under `name`
+- When uninstalled remove
+  - namespace and related
+- When new terraform repo is added
+  - create new name
+  - create all versions from tags
+- When new tag is added create new version
+
 Resources to connect your private module registry with a GitHub Account or Organization.
 
 Test
