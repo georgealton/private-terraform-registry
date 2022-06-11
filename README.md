@@ -7,7 +7,7 @@ https://www.terraform.io/cloud-docs/registry/publish-modules#publishing-private-
 ## OpenAPI
 
 use well known resource arns over imports
-- though breaks the dependency graph trade off is open api spec not coupled to CloudFormation
+- though breaks the dependency graph trade off is open api spec not coupled to CloudFormation -- Can supply iac in any format
 
 
 ## Registry Protocol
