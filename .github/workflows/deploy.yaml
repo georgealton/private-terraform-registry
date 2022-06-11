@@ -22,7 +22,5 @@ jobs:
           aws-region: eu-west-1
       - name: AWS CLI Install
         run: wget -q -O awscliv2.zip https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip && unzip -qq awscliv2.zip && sudo ./aws/install --update
-      - name: CloudFormation Package
-        run: aws cloudformation package --template template.yaml --s3-bucket cf-templates-1491x2vk47ot9-eu-west-1 --output-template-file packaged-template.json
-      - name: CloudFormation Deploy
-        run: aws cloudformation deploy --template-file packaged-template.json --stack-name private-terraform-registry --capabilities CAPABILITY_IAM
+      - name: Deploy
+        run: deploy.sh
