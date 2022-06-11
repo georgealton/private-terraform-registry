@@ -71,7 +71,7 @@ paths:
               },
               "ExpressionAttributeValues": {
                 ":v0": {
-                  "S": "NAMESPACE#${namespace}#NAME#${name}#provider#${provider}"
+                  "S": "NAMESPACE#${namespace}#NAME#${name}#PROVIDER#${provider}"
                 },
                 ":v1": {
                   "S": "VERSION#"
@@ -112,7 +112,7 @@ paths:
               "TableName": "$stageVariables.DB",
               "Key": {
                 "pk": {
-                  "S": "NAMESPACE${namespace}#NAME${name}#provider${provider}"
+                  "S": "NAMESPACE${namespace}#NAME${name}#PROVIDER${provider}"
                 },
                 "sk": {
                   "S": "VERSION#${version}"
