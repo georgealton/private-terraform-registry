@@ -2,6 +2,8 @@
 
 Terraform 0.11 and above support [Private Module Registries][module-registry-protocol].
 
+https://www.terraform.io/cloud-docs/registry/publish-modules#publishing-private-modules-to-the-terraform-cloud-private-registry
+
 ## Registry Protocol
 
 APIs for Terraform to download modules.
@@ -15,7 +17,7 @@ X-Terraform-Get: https://api.github.com/repos/hashicorp/terraform-aws-consul/tar
 
 ## DynamoDB Data
 
-Example
+Module Versions
 
 | pk                                  | sk              |
 | ----------------------------------- | --------------- |
@@ -28,6 +30,10 @@ Example
 Browse and Discover Terraform modules that exist in your registry.
 
 ## GitHub Integration
+
+must follow
+
+https://www.terraform.io/cloud-docs/registry/publish-modules#preparing-a-module-repository
 
 - When installed
   - create new namespace from Org name
