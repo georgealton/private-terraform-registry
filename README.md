@@ -6,7 +6,7 @@ https://www.terraform.io/cloud-docs/registry/publish-modules#publishing-private-
 
 ## OpenAPI
 
-use well known / hardcoded resource arns over imports
+use well known resource arns over imports
 - though breaks the dependency graph trade off is open api spec not coupled to CloudFormation
 
 
@@ -23,13 +23,15 @@ X-Terraform-Get: https://api.github.com/repos/hashicorp/terraform-aws-consul/tar
 
 ## DynamoDB Data
 
+use PROVIDER not SYSTEM - tf docs are inconsistent, choose provider as that is better understood
+
 ### Module Versions
 
 | pk                                  | sk              | data                                     |
 | ----------------------------------- | --------------- | ---------------------------------------- |
-| `NAMESPACE#foo#NAME#bar#SYSTEM#aws` | `VERSION#1.0.0` | {version: "1.0.0", url: "https://blah/"} |
-| `NAMESPACE#foo#NAME#bar#SYSTEM#aws` | `VERSION#1.0.1` | {version: "1.0.1", url: "https://blah/"} |
-| `NAMESPACE#foo#NAME#baz#SYSTEM#aws` | `VERSION#1.0.1` | {version: "1.0.1", url: "https://blah/"} |
+| `NAMESPACE#foo#NAME#bar#PROVIDER#aws` | `VERSION#1.0.0` | {version: "1.0.0", url: "https://blah/"} |
+| `NAMESPACE#foo#NAME#bar#PROVIDER#aws` | `VERSION#1.0.1` | {version: "1.0.1", url: "https://blah/"} |
+| `NAMESPACE#foo#NAME#baz#PROVIDER#aws` | `VERSION#1.0.1` | {version: "1.0.1", url: "https://blah/"} |
 
 ## Registry API
 
