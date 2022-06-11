@@ -112,10 +112,10 @@ paths:
               "TableName": "$stageVariables.DB",
               "Key": {
                 "pk": {
-                  "S": "#NAMESPACE${namespace}#NAME${name}#provider${provider}"
+                  "S": "NAMESPACE${namespace}#NAME${name}#provider${provider}"
                 },
                 "sk": {
-                  "S": "VERSION${version}"
+                  "S": "VERSION#${version}"
                 }
               }
             }
