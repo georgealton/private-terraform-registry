@@ -1,0 +1,38 @@
+[
+  {
+    "sk": {
+      "S": "VERSION#1.0.0"
+    },
+    "pk": {
+      "S": "NAMESPACE#A#NAME#B#PROVIDER#C"
+    },
+    "data": {
+      "M": {
+        "version": {
+          "S": "1.0.0"
+        },
+        "url": {
+          "S": "https://google.com"
+        }
+      }
+    }
+  },
+  {
+    "sk": {
+      "S": "VERSION#1.0.1"
+    },
+    "pk": {
+      "S": "NAMESPACE#A#NAME#B#PROVIDER#C"
+    },
+    "data": {
+      "M": {
+        "version": {
+          "S": "1.0.1"
+        },
+        "url": {
+          "S": "https://tree.com"
+        }
+      }
+    }
+  }
+]
