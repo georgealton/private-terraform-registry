@@ -45,7 +45,7 @@ https://www.terraform.io/cloud-docs/registry/publish-modules#preparing-a-module-
 
 - When installed
   - create new namespace from Org name
-  - add all `terraform-` repositories under `name`
+  - add all `terraform-` repositories under `name` ? allow a custom prefix to enable people to use the public and their private rrgistty 
 - When uninstalled remove
   - namespace and related
 - When new terraform repo is added
