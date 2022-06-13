@@ -93,7 +93,7 @@ paths:
   /terraform/modules/v1/{namespace}/{name}/{provider}/{version}/download:
     get:
       responses:
-        "200":
+        "204":
           description: ""
           headers:
             X-Terraform-Get:
@@ -169,11 +169,39 @@ paths:
         "202":
           description: ""
       x-amazon-apigateway-integration:
+        # type: AWS
         type: mock
-        httpMethod: GET
+        httpMethod: POST
+        # uri: arn:aws:apigateway:${AWS::Region}:events:action/PutEvents
+        # credentials:
         requestTemplates:
           application/json: >-
             {"statusCode": 200}
         responses:
           default:
             statusCode: 202
+            responseTemplates:
+              application/json: >-
+                #set($allParams = $input.params())
+                #set($gh_event = $allParams.header.x-github-event)
+                #set($gh_action = $input.path('$.action'))
+
+                #if($gh_action == "")
+                  #set($gh_action = $input.path('$.ref_type'))
+                #end
+
+                #if($gh_action == 'tag')
+                  #set($detail = $input.path('$.ref'))
+                #elseif($gh_event == "repository")
+                  #set($detail = $input.path('$.repository.full_name'))
+                #end
+
+                {
+                  "Entries": [
+                    {
+                      "Detail": "$detail",
+                      "DetailType": "$gh_event.$gh_action",
+                      "EventBusName": "$stageVariables.event_bus"
+                    }
+                  ]
+                }

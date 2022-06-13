@@ -59,6 +59,7 @@ Resources:
       StageName: main
       Variables:
         registry_db: !Ref DB
+        event_bus: !GetAtt EventBus.Arn
       DefinitionBody:
         "Fn::Transform":
           Name: AWS::Include
@@ -114,6 +115,5 @@ Resources:
             Version: "2012-10-17"
             Statement:
               - Effect: Allow
-                Action:
-                  - events:PutEvent
+                Action: events:PutEvents
                 Resource: !GetAtt EventBus.Arn

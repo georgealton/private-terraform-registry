@@ -42,19 +42,11 @@ must follow
 
 [preparing-a-module-repository]
 
-### S3
-
-upload Modules to
-
-sync folder or archive?
-
-`s3://<PREFIX>/namespace/name/provider/version`
-
 ### GitHub
 
 - When installed
   - create new namespace from Org name
-  - add all `terraform-` repositories under `name` ? allow a custom prefix to enable people to use the public and their private registty
+  - add all `terraform-` repositories under `name` ? allow a custom prefix to enable people to use the public and their private registry
 - When uninstalled remove
   - namespace and related
 - When new terraform repo is added
