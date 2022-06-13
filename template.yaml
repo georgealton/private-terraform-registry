@@ -91,3 +91,29 @@ Resources:
       Tags:
         - Key: Name
           Value: TFRegistry
+
+  EventBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      Name: TFRegistry
+
+  WebHookRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: EventBridgeAccess
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: !Sub events.${AWS::URLSuffix}
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: EventBridge
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - events:PutEvent
+                Resource: !GetAtt EventBus.Arn
