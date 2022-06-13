@@ -53,9 +53,16 @@ https://www.terraform.io/cloud-docs/registry/publish-modules#preparing-a-module-
 
 Resources to connect your private module registry with a GitHub Account or Organization.
 
-Test
+
+### Storage
+
+S3 https://www.terraform.io/language/modules/sources#s3-bucket
+
+### Test
 
 https://webhook.site/41eda23e-69ad-4fc7-8193-d888231a152d
+
+
 
 [module-registry-protocol]: https://www.terraform.io/internals/module-registry-protocol
 [registry-api]: https://www.terraform.io/registry/api-docs
