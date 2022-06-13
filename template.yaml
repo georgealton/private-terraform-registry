@@ -58,7 +58,7 @@ Resources:
     Properties:
       StageName: main
       Variables:
-        DB: !Ref DB
+        registry_db: !Ref DB
       DefinitionBody:
         "Fn::Transform":
           Name: AWS::Include

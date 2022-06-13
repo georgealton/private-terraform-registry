@@ -9,7 +9,6 @@ https://www.terraform.io/cloud-docs/registry/publish-modules#publishing-private-
 use well known resource arns over imports
 - though breaks the dependency graph trade off is open api spec not coupled to CloudFormation -- Can supply iac in any format
 
-
 ## Registry Protocol
 
 APIs for Terraform to download modules.
@@ -27,8 +26,8 @@ use PROVIDER not SYSTEM - tf docs are inconsistent, choose provider as that is b
 
 ### Module Versions
 
-| pk                                  | sk              | data                                     |
-| ----------------------------------- | --------------- | ---------------------------------------- |
+| pk                                    | sk              | data                                     |
+| ------------------------------------- | --------------- | ---------------------------------------- |
 | `NAMESPACE#foo#NAME#bar#PROVIDER#aws` | `VERSION#1.0.0` | {version: "1.0.0", url: "https://blah/"} |
 | `NAMESPACE#foo#NAME#bar#PROVIDER#aws` | `VERSION#1.0.1` | {version: "1.0.1", url: "https://blah/"} |
 | `NAMESPACE#foo#NAME#baz#PROVIDER#aws` | `VERSION#1.0.1` | {version: "1.0.1", url: "https://blah/"} |
@@ -45,7 +44,7 @@ https://www.terraform.io/cloud-docs/registry/publish-modules#preparing-a-module-
 
 - When installed
   - create new namespace from Org name
-  - add all `terraform-` repositories under `name` ? allow a custom prefix to enable people to use the public and their private rrgistty 
+  - add all `terraform-` repositories under `name` ? allow a custom prefix to enable people to use the public and their private registty
 - When uninstalled remove
   - namespace and related
 - When new terraform repo is added

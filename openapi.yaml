@@ -62,12 +62,14 @@ paths:
             #set($name = $util.escapeJavaScript($allParams.path.name))
             #set($provider = $util.escapeJavaScript($allParams.path.provider))
             {
-              "TableName": "$stageVariables.DB",
+              "TableName": "$stageVariables.registry_db",
               "KeyConditionExpression": "#k0 = :v0 AND begins_with(#k1, :v1)",
               "ScanIndexForward": false,
               "ExpressionAttributeNames": {
                 "#k0": "pk",
-                "#k1": "sk"
+                "#k1": "sk",
+                "#data": "data",
+                "#version": "version"
               },
               "ExpressionAttributeValues": {
                 ":v0": {
@@ -76,7 +78,8 @@ paths:
                 ":v1": {
                   "S": "VERSION#"
                 }
-              }
+              },
+              "ProjectionExpression": "#data.#version"
             }
         responses:
           200:
@@ -108,20 +111,29 @@ paths:
             #set($name = $util.escapeJavaScript($allParams.path.name))
             #set($provider = $util.escapeJavaScript($allParams.path.provider))
             #set($version = $util.escapeJavaScript($allParams.path.version))
-             {
-              "TableName": "$stageVariables.DB",
+            {
+              "TableName": "$stageVariables.registry_db",
               "Key": {
                 "pk": {
-                  "S": "NAMESPACE${namespace}#NAME${name}#PROVIDER${provider}"
+                  "S": "NAMESPACE#${namespace}#NAME#${name}#PROVIDER#${provider}"
                 },
                 "sk": {
                   "S": "VERSION#${version}"
                 }
+              },
+              "ProjectionExpression": "#data.#url",
+              "ExpressionAttributeNames": {
+                "#data": "data",
+                "#url": "url"
               }
             }
         responses:
-          default:
+          200:
             statusCode: 200
+            responseTemplates:
+              application/json: |
+                #set($item = $input.path('$.Item'))
+                #set($context.responseOverride.header.X-Terraform-Get = $item.data.M.url.S)
 
   /webhooks/github:
     post:
