@@ -14,7 +14,7 @@ use well known resource arns over imports
 APIs for Terraform to download modules.
 
 ```http
-HTTP/1.1 204 No Content
+HTTP/1.1 204
 Content-Length: 0
 X-Terraform-Get: https://api.github.com/repos/hashicorp/terraform-aws-consul/tarball/v0.0.1//*?archive=tar.gz
 ```
@@ -35,11 +35,22 @@ use PROVIDER not SYSTEM - tf docs are inconsistent, choose provider as that is b
 
 Browse and Discover Terraform modules that exist in your registry.
 
-## GitHub Integration
+## Module Sourcing
 
 must follow
 
 [preparing-a-module-repository]
+
+### S3
+
+upload Modules to
+
+sync folder or archive?
+
+`s3://<PREFIX>/namespace/name/provider/version`
+
+
+### GitHub
 
 - When installed
   - create new namespace from Org name
@@ -59,11 +70,9 @@ Resources to connect your private module registry with a GitHub Account or Organ
 
 ### Test
 
-https://webhook.site/41eda23e-69ad-4fc7-8193-d888231a152d
-
-
+[webhooks]: https://webhook.site/41eda23e-69ad-4fc7-8193-d888231a152d
 [preparing-a-module-repository]: https://www.terraform.io/cloud-docs/registry/publish-modules#preparing-a-module-repository
 [module-registry-protocol]: https://www.terraform.io/internals/module-registry-protocol
 [registry-api]: https://www.terraform.io/registry/api-docs
 [s3-bucket-source]: https://www.terraform.io/language/modules/sources#s3-bucket
-
+[module-structure]: https://www.terraform.io/language/modules/develop/structure
