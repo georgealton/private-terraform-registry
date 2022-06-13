@@ -39,7 +39,7 @@ Browse and Discover Terraform modules that exist in your registry.
 
 must follow
 
-https://www.terraform.io/cloud-docs/registry/publish-modules#preparing-a-module-repository
+[preparing-a-module-repository]
 
 - When installed
   - create new namespace from Org name
@@ -53,16 +53,17 @@ https://www.terraform.io/cloud-docs/registry/publish-modules#preparing-a-module-
 
 Resources to connect your private module registry with a GitHub Account or Organization.
 
-
 ### Storage
 
-S3 https://www.terraform.io/language/modules/sources#s3-bucket
+[s3-bucket-source]
 
 ### Test
 
 https://webhook.site/41eda23e-69ad-4fc7-8193-d888231a152d
 
 
-
+[preparing-a-module-repository]: https://www.terraform.io/cloud-docs/registry/publish-modules#preparing-a-module-repository
 [module-registry-protocol]: https://www.terraform.io/internals/module-registry-protocol
 [registry-api]: https://www.terraform.io/registry/api-docs
+[s3-bucket-source]: https://www.terraform.io/language/modules/sources#s3-bucket
+
