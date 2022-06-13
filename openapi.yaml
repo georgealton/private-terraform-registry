@@ -86,7 +86,7 @@ paths:
             statusCode: 200
             responseTemplates:
               application/json: >-
-                {"modules":[{"versions":[#foreach($item in $input.path('$.Items')){"version":"$item.data.M.version.S"}#if( $foreach.hasNext ),#{end}#{end}]}]}
+                {"modules":[{"versions":[#foreach($item in $input.path('$.Items'))#if($item.data.M.version.S != ""){"version":"$item.data.M.version.S"}#if( $foreach.hasNext ),#{end}#{end}#{end}]}]}
           default:
             statusCode: 500
 
@@ -99,6 +99,17 @@ paths:
             X-Terraform-Get:
               schema:
                 type: string
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
       x-amazon-apigateway-integration:
         httpMethod: POST
         type: AWS
@@ -133,7 +144,13 @@ paths:
             responseTemplates:
               application/json: |
                 #set($item = $input.path('$.Item'))
-                #set($context.responseOverride.header.X-Terraform-Get = $item.data.M.url.S)
+                #set($url = $item.data.M.url.S)
+                #if($url != "")
+                #set($context.responseOverride.header.X-Terraform-Get = $url)
+                #{else}
+                #set($context.responseOverride.status = 404)
+                {"errors":["Not Found"]}
+                #end
 
   /webhooks/github:
     post:
