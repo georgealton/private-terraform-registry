@@ -17,7 +17,6 @@ APIs for Terraform to download modules.
 HTTP/1.1 204 No Content
 Content-Length: 0
 X-Terraform-Get: https://api.github.com/repos/hashicorp/terraform-aws-consul/tarball/v0.0.1//*?archive=tar.gz
-
 ```
 
 ## DynamoDB Data
