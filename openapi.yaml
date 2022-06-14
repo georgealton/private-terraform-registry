@@ -185,9 +185,10 @@ paths:
                 #set($allParams = $input.params())
                 #set($gh_event = $allParams.header.x-github-event)
                 #set($gh_action = $input.path('$.action'))
+                #set($event = {})
 
                 #if($gh_action == "")
-                  #set($gh_action = $input.path('$.ref_type'))
+                  $event.put('Detail', $input.path('$.ref_type'))
                 #end
 
                 #if($gh_action == 'tag')
@@ -196,12 +197,4 @@ paths:
                   #set($detail = $input.path('$.repository.full_name'))
                 #end
 
-                {
-                  "Entries": [
-                    {
-                      "Detail": "$detail",
-                      "DetailType": "$gh_event.$gh_action",
-                      "EventBusName": "$stageVariables.event_bus"
-                    }
-                  ]
-                }
+                {"Entries": [$event]}

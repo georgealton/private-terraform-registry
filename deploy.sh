@@ -1,6 +1,15 @@
 #!/bin/bash
-aws cloudformation package --template template.yaml --s3-bucket cf-templates-1491x2vk47ot9-eu-west-1 --output-template-file packaged-template.json
-aws cloudformation deploy --template-file packaged-template.json --stack-name private-terraform-registry --capabilities CAPABILITY_NAMED_IAM
+
+aws cloudformation package \
+    --template template.yaml \
+    --s3-bucket cf-templates-1491x2vk47ot9-eu-west-1 \
+    --output-template-file packaged-template.json
+
+aws cloudformation deploy \
+    --template-file packaged-template.json \
+    --stack-name private-terraform-registry \
+    --capabilities CAPABILITY_NAMED_IAM \
+    --no-fail-on-empty-changeset
 
 # When we list versions for a module
 #     the api returns a list of versions
