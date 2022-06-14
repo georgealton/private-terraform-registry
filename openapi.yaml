@@ -169,11 +169,11 @@ paths:
         "202":
           description: ""
       x-amazon-apigateway-integration:
-        # type: AWS
         type: mock
         httpMethod: POST
+        # type: AWS
         # uri: arn:aws:apigateway:${AWS::Region}:events:action/PutEvents
-        # credentials:
+        # credentials:  arn:${AWS::Partition}:iam::${AWS::AccountId}:role/WebHookRole
         requestTemplates:
           application/json: >-
             {"statusCode": 200}
