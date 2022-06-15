@@ -165,6 +165,7 @@ paths:
           in: header
         - name: User-Agent
           in: header
+
       responses:
         "202":
           description: ""
@@ -176,25 +177,10 @@ paths:
         # credentials:  arn:${AWS::Partition}:iam::${AWS::AccountId}:role/WebHookRole
         requestTemplates:
           application/json: >-
-            {"statusCode": 200}
+            {"statusCode": 202}
         responses:
-          default:
+          202:
             statusCode: 202
             responseTemplates:
               application/json: >-
-                #set($allParams = $input.params())
-                #set($gh_event = $allParams.header.x-github-event)
-                #set($gh_action = $input.path('$.action'))
-                #set($event = {})
-
-                #if($gh_action == "")
-                  $event.put('Detail', $input.path('$.ref_type'))
-                #end
-
-                #if($gh_action == 'tag')
-                  #set($detail = $input.path('$.ref'))
-                #elseif($gh_event == "repository")
-                  #set($detail = $input.path('$.repository.full_name'))
-                #end
-
-                {"Entries": [$event]}
+                Hi

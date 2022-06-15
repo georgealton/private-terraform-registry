@@ -57,6 +57,11 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: main
+      MethodSettings:
+        - ResourcePath: /*
+          HttpMethod: "*"
+          DataTraceEnabled: true
+          LoggingLevel: ERROR
       Variables:
         registry_db: !Ref DB
         event_bus: !GetAtt EventBus.Arn
