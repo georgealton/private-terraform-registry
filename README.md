@@ -57,7 +57,7 @@ must follow
 
 [preparing-a-module-repository]
 
-## Event Driven
+## Events
 
 ### app.installed
 
