@@ -1,5 +1,8 @@
 # Private Terraform Registry
 
+An extensible, self hosted, private terraform registry without the expense of terraform cloud.
+
+
 Terraform 0.11 and above support [Private Module Registries][module-registry-protocol].
 
 https://www.terraform.io/cloud-docs/registry/publish-modules#publishing-private-modules-to-the-terraform-cloud-private-registry
@@ -36,7 +39,7 @@ use PROVIDER not SYSTEM - tf docs are inconsistent, choose provider as that is b
 
 Browse and Discover Terraform modules that exist in your registry.
 
-## Module Sourcing
+## Module Registration
 
 must follow
 
