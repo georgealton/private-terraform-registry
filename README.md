@@ -101,7 +101,8 @@ module.version_released
 {
   "namespace": "",
   "name": "",
-  "version": ""
+  "version": "",
+  "url": ""
 }
 ```
 
