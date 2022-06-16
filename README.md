@@ -59,13 +59,62 @@ Resources to connect your private module registry with a GitHub Account or Organ
 ## Event Driven
 
 app.installed
-module.created
-module.version_released
-module.version_deleted
-module.deleted
+
+```json
+{
+  "namespace": ""
+}
+```
+
 app.uninstalled
 
+```json
+{
+  "namespace": ""
+}
+```
+
+module.created
+
+```json
+{
+  "namespace": "",
+  "name": ""
+}
+```
+
+module.deleted
+
+```json
+{
+  "namespace": "",
+  "name": ""
+}
+```
+
+module.version_released
+
+```json
+{
+  "namespace": "",
+  "name": "",
+  "version": ""
+}
+```
+
+module.version_revoked
+
+```json
+{
+  "namespace": "",
+  "name": "",
+  "version": ""
+}
+```
+
 ### Storage
+
+Persist README?
 
 [s3-bucket-source]
 

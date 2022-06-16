@@ -178,18 +178,29 @@ paths:
         # credentials:  arn:${AWS::Partition}:iam::${AWS::AccountId}:role/WebHookRole
         requestTemplates:
           application/json: >-
+            #*
+            Extract values from the incoming webhook
+            *#
             #set($allParams = $input.params())
             #set($gh_event = $allParams.header.x-github-event)
             #set($gh_action = $input.path('$.action'))
+            #if($gh_action == "")#set($gh_action = $input.path('$.ref_type'))#end
 
-            #if($gh_action == "")
-              #set($gh_action = $input.path('$.ref_type'))
-            #end
+            #*
+            Translate extracted values into Domain Specific
+            *#
             #if($gh_action == 'tag')
+              #set($registry_action = 'version')
               #set($detail = $input.path('$.ref'))
             #elseif($gh_event == "repository")
               #set($detail = $input.path('$.repository.full_name'))
             #end
+
+            #*
+            Construct event
+
+            No way to skip events going to the integration?
+            *#
             {
               "Entries": [
                 {
