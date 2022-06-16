@@ -21,6 +21,6 @@ jobs:
           aws-region: eu-west-1
       - name: AWS CLI Install
         run: wget -q -O awscliv2.zip https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip && unzip -qq awscliv2.zip && sudo ./aws/install --update
-      - run: apt install httpie
+      - run: sudo apt-get -y install httpie
       - name: Deploy
         run: ./deploy.sh
