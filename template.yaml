@@ -54,6 +54,7 @@ Resources:
   API:
     DependsOn:
       - Role
+      - WebHookRole
     Type: AWS::Serverless::Api
     Properties:
       StageName: main
