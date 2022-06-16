@@ -36,11 +36,12 @@ Provides:
 - Get Version
 - List Versions
 
-| pk                                    | sk              | data                                     |
-| ------------------------------------- | --------------- | ---------------------------------------- |
-| `NAMESPACE#foo#NAME#bar#PROVIDER#aws` | `VERSION#1.0.0` | {version: "1.0.0", url: "https://blah/"} |
-| `NAMESPACE#foo#NAME#bar#PROVIDER#aws` | `VERSION#1.0.1` | {version: "1.0.1", url: "https://blah/"} |
-| `NAMESPACE#foo#NAME#baz#PROVIDER#aws` | `VERSION#1.0.1` | {version: "1.0.1", url: "https://blah/"} |
+| pk              | sk                                   | data                                     |
+| --------------- | ------------------------------------ | ---------------------------------------- |
+| `NAMESPACE#foo` | `NAMESPACE#foo`                      |                                          |
+| `NAMESPACE#foo` | `NAME#bar#PROVIDER#awsVERSION#1.0.0` | {version: "1.0.0", url: "https://blah/"} |
+| `NAMESPACE#foo` | `NAME#bar#PROVIDER#awsVERSION#1.0.1` | {version: "1.0.1", url: "https://blah/"} |
+| `NAMESPACE#foo` | `NAME#baz#PROVIDER#awsVERSION#1.0.1` | {version: "1.0.1", url: "https://blah/"} |
 
 ## Registry API
 
@@ -48,7 +49,7 @@ Browse and Discover Terraform modules that exist in your registry.
 
 ## Authentication
 
-...
+[terraform-cli-registry-auth][https://www.terraform.io/cli/config/config-file#credentials-1]
 
 ## Module Registration
 
