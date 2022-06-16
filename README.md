@@ -2,10 +2,9 @@
 
 An extensible, self hosted, private terraform registry without the expense of terraform cloud.
 
-
 Terraform 0.11 and above support [Private Module Registries][module-registry-protocol].
 
-https://www.terraform.io/cloud-docs/registry/publish-modules#publishing-private-modules-to-the-terraform-cloud-private-registry
+[publishing-private-modules]
 
 ## OpenAPI
 
@@ -25,9 +24,17 @@ X-Terraform-Get: https://api.github.com/repos/hashicorp/terraform-aws-consul/tar
 
 ## DynamoDB Data
 
-use PROVIDER not SYSTEM - tf docs are inconsistent, choose provider as that is better understood
+### Provider vs System
 
-### Module Versions
+Terraform documentation uses provider and system for a module interchangeably. I've opted to use provider
+because that seems more common in terraform nomenclature.
+
+### Module Versions (Primary Index)
+
+Provides:
+
+- Get Version
+- List Versions
 
 | pk                                    | sk              | data                                     |
 | ------------------------------------- | --------------- | ---------------------------------------- |
@@ -39,13 +46,74 @@ use PROVIDER not SYSTEM - tf docs are inconsistent, choose provider as that is b
 
 Browse and Discover Terraform modules that exist in your registry.
 
+## Authentication
+
+...
+
 ## Module Registration
 
 must follow
 
 [preparing-a-module-repository]
 
-### GitHub
+## Event Driven
+
+### app.installed
+
+```json
+{
+  "namespace": ""
+}
+```
+
+### app.uninstalled
+
+```json
+{
+  "namespace": ""
+}
+```
+
+### module.created
+
+```json
+{
+  "namespace": "",
+  "name": ""
+}
+```
+
+### module.deleted
+
+```json
+{
+  "namespace": "",
+  "name": ""
+}
+```
+
+### module.version_released
+
+```json
+{
+  "namespace": "",
+  "name": "",
+  "version": "",
+  "url": ""
+}
+```
+
+### module.version_revoked
+
+```json
+{
+  "namespace": "",
+  "name": "",
+  "version": ""
+}
+```
+
+## GitHub Integration
 
 - When installed
   - create new namespace from Org name
@@ -59,63 +127,6 @@ must follow
 
 Resources to connect your private module registry with a GitHub Account or Organization.
 
-## Event Driven
-
-app.installed
-
-```json
-{
-  "namespace": ""
-}
-```
-
-app.uninstalled
-
-```json
-{
-  "namespace": ""
-}
-```
-
-module.created
-
-```json
-{
-  "namespace": "",
-  "name": ""
-}
-```
-
-module.deleted
-
-```json
-{
-  "namespace": "",
-  "name": ""
-}
-```
-
-module.version_released
-
-```json
-{
-  "namespace": "",
-  "name": "",
-  "version": "",
-  "url": ""
-}
-```
-
-module.version_revoked
-
-```json
-{
-  "namespace": "",
-  "name": "",
-  "version": ""
-}
-```
-
 ### Storage
 
 Persist README?
@@ -125,6 +136,7 @@ Persist README?
 ### Test
 
 [webhooks]: https://webhook.site/41eda23e-69ad-4fc7-8193-d888231a152d
+[publishing-private-modules]: https://www.terraform.io/cloud-docs/registry/publish-modules#publishing-private-modules-to-the-terraform-cloud-private-registry
 [preparing-a-module-repository]: https://www.terraform.io/cloud-docs/registry/publish-modules#preparing-a-module-repository
 [module-registry-protocol]: https://www.terraform.io/internals/module-registry-protocol
 [registry-api]: https://www.terraform.io/registry/api-docs
