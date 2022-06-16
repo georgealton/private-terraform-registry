@@ -170,16 +170,39 @@ paths:
         "202":
           description: ""
       x-amazon-apigateway-integration:
-        type: mock
+        type: http
         httpMethod: POST
+        uri: https://webhook.site/41eda23e-69ad-4fc7-8193-d888231a152d
         # type: AWS
         # uri: arn:aws:apigateway:${AWS::Region}:events:action/PutEvents
         # credentials:  arn:${AWS::Partition}:iam::${AWS::AccountId}:role/WebHookRole
         requestTemplates:
           application/json: >-
-            {"statusCode": 202}
+            #set($allParams = $input.params())
+            #set($gh_event = $allParams.header.x-github-event)
+            #set($gh_action = $input.path('$.action'))
+
+            #if($gh_action == "")
+              #set($gh_action = $input.path('$.ref_type'))
+            #end
+            #if($gh_action == 'tag')
+              #set($detail = $input.path('$.ref'))
+            #elseif($gh_event == "repository")
+              #set($detail = $input.path('$.repository.full_name'))
+            #end
+            {
+              "Entries": [
+                {
+                  "Detail": "$detail",
+                  "DetailType": "$gh_event.$gh_action",
+                  "EventBusName": "$stageVariables.event_bus",
+                  "TraceHeader": "$allParams.header.x-amzn-trace-id"
+                }
+              ]
+            }
+
         responses:
-          202:
+          default:
             statusCode: 202
             responseTemplates:
               application/json: >-

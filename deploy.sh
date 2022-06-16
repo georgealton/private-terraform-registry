@@ -22,4 +22,14 @@ curl -v $BASE_URL/main/terraform/modules/v1/A/B/C/1.0.0/download
 # The API returns a 404 and errors if the version does not exist
 curl -v $BASE_URL/main/terraform/modules/v1/A/B/C/0.0.0/download
 
-curl -v -H 'x-github-event:repository' -H 'content-type:application/json' -d @data/github-repository-created.json $BASE_URL/main/webhooks/github
+curl -v \
+    -H 'x-github-event:repository' \
+    -H 'content-type:application/json' \
+    -d @data/github-repository-created.json \
+    $BASE_URL/main/webhooks/github
+
+curl -v \
+    -H 'x-github-event:installation' \
+    -H 'content-type:application/json' \
+    -d @data/github-app-installation.json \
+    $BASE_URL/main/webhooks/github

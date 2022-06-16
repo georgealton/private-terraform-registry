@@ -56,6 +56,15 @@ must follow
 
 Resources to connect your private module registry with a GitHub Account or Organization.
 
+## Event Driven
+
+app.installed
+module.created
+module.version_released
+module.version_deleted
+module.deleted
+app.uninstalled
+
 ### Storage
 
 [s3-bucket-source]
