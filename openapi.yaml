@@ -87,8 +87,9 @@ paths:
             responseTemplates:
               application/json: >-
                 #set($items = $input.path('$.Items'))
-                #if(items.isEmpty())
+                #if($items.isEmpty())
                 #set($context.responseOverride.status = 404)
+                {"errors":["Not Found"]}
                 #else
                 {"modules":[{"versions":[#foreach($item in $items)#if($item.data.M.version.S != ""){"version":"$item.data.M.version.S"}#if( $foreach.hasNext ),#{end}#{end}#{end}]}]}
                 #end
