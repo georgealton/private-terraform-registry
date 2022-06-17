@@ -4,15 +4,17 @@ An extensible, self hosted, private terraform registry without the expense of te
 
 Why would I want a module registry?
 
-Version Management
-You can reference modules using git::...ref=1.0.0 but terraform won't be able to perform version management here. Dependabot should be able to do this too.
+## Version Management
 
-Discoverability
+You can reference modules using `github.com/georgealton/example?ref=v1.0.0` but terraform won't be able to perform version management here. Dependabot should be able to do this too.
+
+## Discoverability
+
 If all your modules are in git repositories they can be hard to discover a private registry makes them easier to browse and discover
 
-Adaptability
-Centralizing the location of your modules means that they're abstracted away from the VCS provider.
+## Adaptability
 
+Centralizing the location of your modules means that they're abstracted away from the VCS provider.
 
 Terraform 0.11 and above support [Private Module Registries][module-registry-protocol].
 

@@ -90,6 +90,14 @@ Resources:
         - Key: Name
           Value: TFRegistry
 
+  RegistryMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      BasePath: /
+      DomainName: !Ref DomainName
+      RestApiId: !GetAtt API.RootResourceId
+      Stage: main
+
   API:
     DependsOn:
       - Role
@@ -97,6 +105,7 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: main
+      DisableExecuteApiEndpoint: true
       MethodSettings:
         - ResourcePath: /*
           HttpMethod: "*"
@@ -107,7 +116,7 @@ Resources:
         event_bus: !GetAtt EventBus.Arn
         github_host: github.com
       DefinitionBody:
-        "Fn::Transform":
+        Fn::Transform:
           Name: AWS::Include
           Parameters:
             Location: openapi.yaml

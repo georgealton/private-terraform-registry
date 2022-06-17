@@ -1,10 +1,10 @@
 [
   {
     "sk": {
-      "S": "VERSION#1.0.0"
+      "S": "NAME#foo#PROVIDER#bar#VERSION#1.0.0"
     },
     "pk": {
-      "S": "NAMESPACE#A#NAME#B#PROVIDER#C"
+      "S": "NAMESPACE#georgealton-org"
     },
     "data": {
       "M": {
@@ -12,17 +12,17 @@
           "S": "1.0.0"
         },
         "url": {
-          "S": "https://google.com"
+          "S": "https://"
         }
       }
     }
   },
   {
     "sk": {
-      "S": "VERSION#1.0.1"
+      "S": "NAME#foo#PROVIDER#bar#VERSION#1.0.1"
     },
     "pk": {
-      "S": "NAMESPACE#A#NAME#B#PROVIDER#C"
+      "S": "NAMESPACE#A"
     },
     "data": {
       "M": {

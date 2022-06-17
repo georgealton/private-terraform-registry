@@ -30,6 +30,6 @@ echo "   The API returns a 404 and errors if the version does not exist"
 http --session=session --follow "${BASE_URL}/terraform/modules/v1/A/B/C/0.0.0/download"
 ####
 
-http --session=session --follow "${BASE_URL}/webhooks/github" "X-GITHUB-EVENT:repository" "CONTENT-TYPE:application/json" '@data/github-tag-added.json'
+http --session=session --follow "${BASE_URL}/webhooks/github" "X-GITHUB-EVENT:repository" "CONTENT-TYPE:application/json" '@data/github/tag-added.json'
 # http --session=session --follow "${BASE_URL}/webhooks/github" "X-GITHUB-EVENT:repository" "CONTENT-TYPE:application/json" '@data/github-repository-created.json'
 # http --session=session --follow "${BASE_URL}/webhooks/github" "X-GITHUB-EVENT:installation" "CONTENT-TYPE:application/json" '@data/github-app-installation.json'
