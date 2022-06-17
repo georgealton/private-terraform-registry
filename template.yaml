@@ -177,3 +177,5 @@ Resources:
 
 Outputs:
   APIDomainName:
+    Description: Create a DNS record <DomainName> for pointing to this DomainName
+    Value: !GetAtt APIDomainName.RegionalDomainName
