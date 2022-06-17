@@ -1,5 +1,19 @@
 Transform: AWS::Serverless-2016-10-31
 
+Parameters:
+  DomainName:
+    Type: String
+
+  CertificateARN:
+    Type: String
+    Description: >
+      If you already have a certificate in AWS Certificate Manager that covers the DomainName supply the ARN here. This will skip creation
+      of a new certificate.
+    Default: ""
+
+Conditions:
+  CreateCertificate: !Equals [!Ref CertificateARN, ""]
+
 Resources:
   Storage:
     Type: AWS::S3::Bucket
@@ -51,6 +65,32 @@ Resources:
         - Key: Name
           Value: TFRegistry
 
+  Certificate:
+    Condition: CreateCertificate
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Ref DomainName
+      ValidationMethod: DNS
+      Tags:
+        - Key: Name
+          Value: TFRegistry
+
+  APIDomainName:
+    Type: AWS::ApiGateway::DomainName
+    Properties:
+      CertificateArn: !If
+        - CreateCertificate
+        - !Ref Certificate
+        - !Ref CertificateARN
+
+      DomainName: !Ref DomainName
+      OwnershipVerificationCertificateArn: String
+      RegionalCertificateArn: String
+      SecurityPolicy: String
+      Tags:
+        - Key: Name
+          Value: TFRegistry
+
   API:
     DependsOn:
       - Role
@@ -66,6 +106,7 @@ Resources:
       Variables:
         registry_db: !Ref DB
         event_bus: !GetAtt EventBus.Arn
+        github_host: github.com
       DefinitionBody:
         "Fn::Transform":
           Name: AWS::Include

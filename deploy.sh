@@ -9,9 +9,10 @@ aws cloudformation deploy \
     --template-file packaged-template.json \
     --stack-name private-terraform-registry \
     --capabilities CAPABILITY_NAMED_IAM \
-    --no-fail-on-empty-changeset
+    --no-fail-on-empty-changeset \
+    --parameter-overrides file://parameters.json
 
-BASE_URL=i69k0wcgvg.execute-api.eu-west-1.amazonaws.com/main
+BASE_URL=https://terraform.georgealton.com
 
 ###
 echo "When we list versions for a module"
@@ -29,5 +30,6 @@ echo "   The API returns a 404 and errors if the version does not exist"
 http --session=session --follow "${BASE_URL}/terraform/modules/v1/A/B/C/0.0.0/download"
 ####
 
-http --session=session --follow "${BASE_URL}/webhooks/github" "X-GITHUB-EVENT:repository" "CONTENT-TYPE:application/json" '@data/github-repository-created.json'
-http --session=session --follow "${BASE_URL}/webhooks/github" "X-GITHUB-EVENT:installation" "CONTENT-TYPE:application/json" '@data/github-app-installation.json'
+http --session=session --follow "${BASE_URL}/webhooks/github" "X-GITHUB-EVENT:repository" "CONTENT-TYPE:application/json" '@data/github-tag-added.json'
+# http --session=session --follow "${BASE_URL}/webhooks/github" "X-GITHUB-EVENT:repository" "CONTENT-TYPE:application/json" '@data/github-repository-created.json'
+# http --session=session --follow "${BASE_URL}/webhooks/github" "X-GITHUB-EVENT:installation" "CONTENT-TYPE:application/json" '@data/github-app-installation.json'

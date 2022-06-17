@@ -1,0 +1,10 @@
+[
+  {
+    "ParameterKey": "DomainName",
+    "ParameterValue": "terraform.georgealton.com"
+  },
+  {
+    "ParameterKey": "CertificateARN",
+    "ParameterValue": "arn:aws:acm:eu-west-1:531249009620:certificate/d5428c0d-7aac-46dd-99af-accb9b480342"
+  }
+]

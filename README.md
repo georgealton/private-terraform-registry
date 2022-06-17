@@ -51,6 +51,8 @@ Browse and Discover Terraform modules that exist in your registry.
 
 [terraform-cli-registry-auth][https://www.terraform.io/cli/config/config-file#credentials-1]
 
+using the value from the `.terraformrc` or environment variable terraform put the value into `Authorization: Bearer <value>
+
 ## Module Registration
 
 must follow

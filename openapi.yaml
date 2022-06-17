@@ -188,18 +188,39 @@ paths:
             Extract values from the incoming webhook
             *#
             #set($allParams = $input.params())
-            #set($gh_event = $allParams.header.x-github-event)
-            #set($gh_action = $input.path('$.action'))
-            #if($gh_action == "")#set($gh_action = $input.path('$.ref_type'))#end
+            #set($github_event = $allParams.header.x-github-event)
+            #set($github_action = $input.path('$.action'))
+
+            #set($module_version = 'module_version')
+            #set($namespace = 'namespace')
+
+            #set($detail = {})
+
+            #* repository webhook events don't have `action` *#
+            #if($github_action == "")
+                #set($github_action = $input.path('$.ref_type'))
+            #end
 
             #*
             Translate extracted values into Domain Specific
             *#
-            #if($gh_action == 'tag')
-              #set($registry_action = 'version')
-              #set($detail = $input.path('$.ref'))
-            #elseif($gh_event == "repository")
-              #set($detail = $input.path('$.repository.full_name'))
+            #if($github_action == 'tag')
+                #if($github_event == 'created')
+                    #set($registry_action = 'module_version.released')
+                #end
+
+                $detail.put('namespace', "$input.path('$.repository.owner.login')")
+                $detail.put('name', "$input.path('$.repository.name')")
+                $detail.put('version', "$input.path('$.ref')")
+                $detail.put('url', "https://$stageVariables.github_host/$input.path('$.repository.full_name')/archive/refs/tags/$input.path('$.ref').tar.gz")
+            #elseif($github_event == "repository")
+
+                #if($github_event == 'created')
+                    #set($registry_action = 'module.created')
+                #end
+
+                $detail.put('namespace', $input.path('$.repository.owner.login'))
+                $detail.put('name', $input.path('$.repository.name'))
             #end
 
             #*
@@ -210,10 +231,12 @@ paths:
             {
               "Entries": [
                 {
-                  "Detail": "$detail",
-                  "DetailType": "$gh_event.$gh_action",
-                  "EventBusName": "$stageVariables.event_bus",
-                  "TraceHeader": "$allParams.header.x-amzn-trace-id"
+                    "Detail": {#foreach($key in $detail.keySet())
+                      "$key": "$detail.get($key)"#if($foreach.hasNext),#end
+                    #end},
+                    "DetailType": "$registry_action.$github_action",
+                    "EventBusName": "$stageVariables.event_bus",
+                    "TraceHeader": "$allParams.header.x-amzn-trace-id"
                 }
               ]
             }
