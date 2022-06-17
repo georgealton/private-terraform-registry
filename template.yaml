@@ -105,6 +105,8 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: main
+      EndpointConfiguration:
+        Type: REGIONAL
       DisableExecuteApiEndpoint: true
       MethodSettings:
         - ResourcePath: /*
@@ -172,3 +174,6 @@ Resources:
               - Effect: Allow
                 Action: events:PutEvents
                 Resource: !GetAtt EventBus.Arn
+
+Outputs:
+  APIDomainName:
