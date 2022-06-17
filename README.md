@@ -2,6 +2,18 @@
 
 An extensible, self hosted, private terraform registry without the expense of terraform cloud.
 
+Why would I want a module registry?
+
+Version Management
+You can reference modules using git:: URLs bit this ties you
+
+Discoverability
+If all your modules are in git repositories they can be hard to discover a private registry makes them easier to browse and discover
+
+Adaptability
+Centralizing the location of your modules means that they're abstracted away from the VCS provider.
+
+
 Terraform 0.11 and above support [Private Module Registries][module-registry-protocol].
 
 [publishing-private-modules]
