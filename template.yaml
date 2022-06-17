@@ -16,7 +16,7 @@ Parameters:
   APIEndpointType:
     Type: String
     Description: >
-      REGIONAL or EDGE . If using EDGE, the Certificate must be located in us-east-1. Either deploy the entire stack in us-east-1 or pass in the arn of a certificate in us-east-1.
+      REGIONAL or EDGE . When using EDGE, the Certificate must be located in us-east-1. Either deploy the entire stack in us-east-1 or pass in the arn of a certificate in us-east-1.
     AllowedValues:
       - REGIONAL
       - EDGE
