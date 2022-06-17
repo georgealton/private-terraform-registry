@@ -90,7 +90,7 @@ Resources:
   APIDomainName:
     Type: AWS::ApiGateway::DomainName
     Properties:
-      CertificateArn: !If
+      RegionalCertificateArn: !If
         - CreateCertificate
         - !Ref Certificate
         - !Ref CertificateARN
