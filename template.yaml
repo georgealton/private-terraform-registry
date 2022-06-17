@@ -3,6 +3,8 @@ Transform: AWS::Serverless-2016-10-31
 Parameters:
   DomainName:
     Type: String
+    Description: >
+      Usually like terraform.<your parent domain>
 
   CertificateARN:
     Type: String
@@ -84,9 +86,6 @@ Resources:
         - !Ref CertificateARN
 
       DomainName: !Ref DomainName
-      OwnershipVerificationCertificateArn: String
-      RegionalCertificateArn: String
-      SecurityPolicy: String
       Tags:
         - Key: Name
           Value: TFRegistry
