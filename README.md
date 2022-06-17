@@ -5,7 +5,7 @@ An extensible, self hosted, private terraform registry without the expense of te
 Why would I want a module registry?
 
 Version Management
-You can reference modules using git:: URLs bit this ties you
+You can reference modules using git::...ref=1.0.0 but terraform won't be able to perform version management here. Dependabot should be able to do this too.
 
 Discoverability
 If all your modules are in git repositories they can be hard to discover a private registry makes them easier to browse and discover
@@ -63,7 +63,13 @@ Browse and Discover Terraform modules that exist in your registry.
 
 [terraform-cli-registry-auth][https://www.terraform.io/cli/config/config-file#credentials-1]
 
-using the value from the `.terraformrc` or environment variable terraform put the value into `Authorization: Bearer <value>
+[https://www.terraform.io/cli/config/config-file#environment-variable-credentials]
+
+```sh
+TF_TOKEN_terraform_georgealton_com="_TOKEN_"
+```
+
+using the value from the `.terraformrc` or environment variable terraform put the value into `Authorization: Bearer <value>`
 
 ## Module Registration
 
