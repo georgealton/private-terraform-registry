@@ -84,7 +84,9 @@ Resources:
         - CreateCertificate
         - !Ref Certificate
         - !Ref CertificateARN
-
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
       DomainName: !Ref DomainName
       Tags:
         - Key: Name
