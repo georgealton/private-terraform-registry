@@ -13,8 +13,18 @@ Parameters:
       of a new certificate.
     Default: ""
 
+  APIEndpointType:
+    Type: String
+    Description: >
+      REGIONAL or EDGE . If using EDGE, the Certificate must be located in us-east-1. Either deploy the entire stack in us-east-1 or pass in the arn of a certificate in us-east-1.
+    AllowedValues:
+      - REGIONAL
+      - EDGE
+    Default: REGIONAL
+
 Conditions:
   CreateCertificate: !Equals [!Ref CertificateARN, ""]
+  RegionalAPIEndpoint: !Equals [!Ref APIEndpointType, REGIONAL]
 
 Resources:
   Storage:
@@ -86,7 +96,7 @@ Resources:
         - !Ref CertificateARN
       EndpointConfiguration:
         Types:
-          - REGIONAL
+          - !Ref APIEndpointType
       DomainName: !Ref DomainName
       Tags:
         - Key: Name
@@ -108,7 +118,7 @@ Resources:
     Properties:
       StageName: main
       EndpointConfiguration:
-        Type: REGIONAL
+        Type: !Ref APIEndpointType
       DisableExecuteApiEndpoint: true
       MethodSettings:
         - ResourcePath: /*
@@ -179,5 +189,6 @@ Resources:
 
 Outputs:
   APIDomainName:
+    Condition: RegionalAPIEndpoint
     Description: Create a DNS record <DomainName> for pointing to this DomainName
     Value: !GetAtt APIDomainName.RegionalDomainName
