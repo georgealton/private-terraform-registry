@@ -105,7 +105,6 @@ Resources:
   RegistryMapping:
     Type: AWS::ApiGateway::BasePathMapping
     Properties:
-      BasePath: /
       DomainName: !Ref DomainName
       RestApiId: !GetAtt API.RootResourceId
       Stage: main
