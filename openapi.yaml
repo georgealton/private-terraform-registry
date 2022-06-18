@@ -2,6 +2,20 @@ openapi: 3.0.3
 info:
   title: Private Terraform Registry
   version: 0.0.1
+
+securityDefinitions:
+  authorizer:
+    type: apiKey
+    name: Authorization
+    in: header
+    x-amazon-apigateway-authtype: oauth2
+    x-amazon-apigateway-authorizer:
+      type: token
+      authorizerUri: "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:account-id:function:function-name/invocations"
+      authorizerCredentials: "arn:aws:iam::account-id:role"
+      identityValidationExpression: "^x-[a-z]+"
+      authorizerResultTtlInSeconds: 60
+
 paths:
   /.well-known/terraform.json:
     get:
