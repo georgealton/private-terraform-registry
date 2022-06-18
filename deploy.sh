@@ -51,7 +51,7 @@ http \
     --ignore-stdin \
     --timeout 5 \
     --follow \
-    "X-GITHUB-EVENT:repository" "CONTENT-TYPE:application/json" '@data/github/tag-added.json' \
-    "${BASE_URL}/webhooks/github"
+    "${BASE_URL}/webhooks/github" \
+    "X-GITHUB-EVENT:repository" "CONTENT-TYPE:application/json" '@data/github/tag-added.json'
 # http --follow "${BASE_URL}/webhooks/github" "X-GITHUB-EVENT:repository" "CONTENT-TYPE:application/json" '@data/github-repository-created.json'
 # http --follow "${BASE_URL}/webhooks/github" "X-GITHUB-EVENT:installation" "CONTENT-TYPE:application/json" '@data/github-app-installation.json'
