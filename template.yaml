@@ -186,6 +186,33 @@ Resources:
                 Action: events:PutEvents
                 Resource: !GetAtt EventBus.Arn
 
+  Authorizer:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub RegistryAuthorizer-${AWS::Region}
+      Architectures:
+        - arm64
+      Handler: index.handler
+      Code:
+        ZipFile: |
+          exports.handler = (event, context) => console.log("hello world")
+      Runtime: nodejs16.x
+      Role: !Ref AuthorizerExecutionRole
+      TracingConfig:
+        Mode: Active
+      MemorySize: 128
+
+  AuthorizerExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: !Sub lambda.${AWS::URLSuffix}
+            Action: sts:AssumeRole
+
 Outputs:
   APIDomainName:
     Condition: RegionalAPIEndpoint

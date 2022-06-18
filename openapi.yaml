@@ -11,8 +11,8 @@ securityDefinitions:
     x-amazon-apigateway-authtype: oauth2
     x-amazon-apigateway-authorizer:
       type: token
-      authorizerUri: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:function-name/invocations
-      authorizerCredentials: arn:aws:iam::${AWS::AccountId}:role
+      authorizerUri: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:RegistryAuthorizer-${AWS::Region}/invocations
+      authorizerCredentials: arn:aws:iam::${AWS::AccountId}:role/
       identityValidationExpression: "^x-[a-z]+"
       authorizerResultTtlInSeconds: 60
 
