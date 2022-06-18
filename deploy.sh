@@ -1,13 +1,14 @@
 #!/bin/sh
 
-aws cloudformation package \
-    --template 'template.yaml' \
-    --s3-bucket 'cf-templates-1491x2vk47ot9-eu-west-1' \
-    --output-template-file 'packaged-template.json'
+TEMPLATE='template.yaml'
+BUCKET='cf-templates-1491x2vk47ot9-eu-west-1'
+STACK='private-terraform-registry'
+
+aws cloudformation package --template "$TEMPLATE" --s3-bucket "$BUCKET" --output-template-file 'packaged-template'
 
 aws cloudformation deploy \
-    --template-file 'packaged-template.json' \
-    --stack-name 'private-terraform-registry' \
+    --template-file 'packaged-template' \
+    --stack-name "$STACK" \
     --capabilities 'CAPABILITY_NAMED_IAM' \
     --disable-rollback \
     --no-fail-on-empty-changeset \
