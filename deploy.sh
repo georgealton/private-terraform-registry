@@ -9,6 +9,7 @@ aws cloudformation deploy \
     --template-file packaged-template.json \
     --stack-name private-terraform-registry \
     --capabilities CAPABILITY_NAMED_IAM \
+    --disable-rollback \
     --no-fail-on-empty-changeset \
     --parameter-overrides file://parameters.json
 
