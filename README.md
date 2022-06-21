@@ -140,7 +140,9 @@ must follow
 }
 ```
 
-## GitHub Integration
+### Source Control Integration
+
+## GitHub
 
 - When installed
   - create new namespace from Org name
@@ -154,9 +156,9 @@ must follow
 
 Resources to connect your private module registry with a GitHub Account or Organization.
 
-### Storage
+### Storage Backend
 
-Persist README?
+## S3
 
 [s3-bucket-source]
 
