@@ -216,10 +216,13 @@ paths:
             #end
 
             #*
-            Translate extracted values into Domain Specific
+            Translate GitHub Events into Events
             *#
             #if($github_action == 'tag')
+            ## https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#create
                 #if($github_event == 'created')
+                    #set($registry_action = 'module_version.released')
+                #elseif($github_event == 'deleted')
                     #set($registry_action = 'module_version.released')
                 #end
 
@@ -227,14 +230,28 @@ paths:
                 $detail.put('name', "$input.path('$.repository.name')")
                 $detail.put('version', "$input.path('$.ref')")
                 $detail.put('url', "https://$stageVariables.github_host/$input.path('$.repository.full_name')/archive/refs/tags/$input.path('$.ref').tar.gz")
-            #elseif($github_event == "repository")
 
+            #elseif($github_event == "repository")
+            ## https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#repository
                 #if($github_event == 'created')
                     #set($registry_action = 'module.created')
-                #end
+                 #elseif($github_event == 'deleted')
+                    #set($registry_action = 'module_version.released')
+                 #end
+
 
                 $detail.put('namespace', $input.path('$.repository.owner.login'))
                 $detail.put('name', $input.path('$.repository.name'))
+
+            #elseif($github_event == "installation")
+            ## https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#installation
+
+              #if($github_event == 'created')
+                  #set($registry_action = 'module.created')
+                #elseif($github_event == 'deleted')
+                  #set($registry_action = 'module_version.released')
+                #end
+
             #end
 
             #*
