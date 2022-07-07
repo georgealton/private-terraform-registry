@@ -192,7 +192,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: POST
-        uri: https://webhook.site/41eda23e-69ad-4fc7-8193-d888231a152d
+        uri: https://webhook.site/6d91544e-83e4-4495-88f6-4fad91908488
         # type: AWS
         # uri: arn:aws:apigateway:${AWS::Region}:events:action/PutEvents
         # credentials:  arn:${AWS::Partition}:iam::${AWS::AccountId}:role/WebHookRole
