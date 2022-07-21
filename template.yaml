@@ -213,6 +213,34 @@ Resources:
               Service: !Sub lambda.${AWS::URLSuffix}
             Action: sts:AssumeRole
 
+  UserPool:
+    Type: AWS::Cognito::UserPool
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+
+  VCSClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      AllowedOAuthFlows:
+        - client_credentials
+
+  IdentityProvider:
+    Type: AWS::Cognito::UserPoolIdentityProvider
+    Properties:
+      ProviderName: Okta
+      ProviderType: OIDC
+      UserPoolId: !Ref UserPool
+
+  UserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: TODO
+      UserPoolId: !Ref UserPool
+
 Outputs:
   APIDomainName:
     Condition: RegionalAPIEndpoint
