@@ -1,10 +1,15 @@
 Transform: AWS::Serverless-2016-10-31
 
 Parameters:
+  ParentDomain:
+    Type: String
+    Description: >
+      Your domain name
+
   DomainName:
     Type: String
     Description: >
-      Usually like terraform.<your parent domain>
+      Usually like terraform
 
   CertificateARN:
     Type: String
@@ -81,7 +86,7 @@ Resources:
     Condition: CreateCertificate
     Type: AWS::CertificateManager::Certificate
     Properties:
-      DomainName: !Ref DomainName
+      DomainName: !Sub ${ParentDomain}.${DomainName}
       ValidationMethod: DNS
       Tags:
         - Key: Name
@@ -97,7 +102,7 @@ Resources:
       EndpointConfiguration:
         Types:
           - !Ref APIEndpointType
-      DomainName: !Ref DomainName
+      DomainName: !Sub ${ParentDomain}.${DomainName}
       Tags:
         - Key: Name
           Value: TFRegistry
@@ -238,7 +243,7 @@ Resources:
   UserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
-      Domain: TODO
+      Domain: !Ref ParentDomain
       UserPoolId: !Ref UserPool
 
 Outputs:
