@@ -19,8 +19,8 @@ aws cloudformation deploy \
     --no-fail-on-empty-changeset \
     --parameter-overrides 'file://parameters.json'
 
+# Integration Test
 BASE_URL="https://terraform.georgealton.com"
-
 ###
 echo "When we list versions for a module"
 echo "The api returns a list of versions"
