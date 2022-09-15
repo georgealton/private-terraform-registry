@@ -63,6 +63,8 @@ Resources:
           Value: TFRegistry
 
   DB:
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Type: AWS::DynamoDB::Table
     Properties:
       KeySchema:
@@ -219,6 +221,8 @@ Resources:
             Action: sts:AssumeRole
 
   UserPool:
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Type: AWS::Cognito::UserPool
 
   UserPoolClient:
@@ -236,7 +240,7 @@ Resources:
   IdentityProvider:
     Type: AWS::Cognito::UserPoolIdentityProvider
     Properties:
-      ProviderName: Okta
+      ProviderName: IdentityProvider
       ProviderType: OIDC
       UserPoolId: !Ref UserPool
 

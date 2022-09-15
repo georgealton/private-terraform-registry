@@ -140,13 +140,19 @@ must follow
 }
 ```
 
+### Domain Integration
+
+- Supply a Certificate
+- Generate an ACM certificate
+
 ### Source Control Integration
 
 ## GitHub
 
 - When installed
   - create new namespace from Org name
-  - add all `terraform-` repositories under `name` ? allow a custom prefix to enable people to use the public and their private registry
+  - add all PREFIX `terraform-` repositories under `name`
+    - allow a custom prefix
 - When uninstalled remove
   - namespace and related
 - When new terraform repo is added
@@ -158,11 +164,24 @@ Resources to connect your private module registry with a GitHub Account or Organ
 
 ### Storage Backend
 
+Q. Is separate Storage Backend Necessary? Can we rely on VCS access?
+  - Isolates Registry from VCS
+  - Adds Complexity to codebase
+  - Duplicates storage
+  - Simplifies Access Control?
+
 ## S3
 
 [s3-bucket-source]
 
 ### Test
+
+## User Access
+
+Users should be able to browse the registry
+Don't want to manage Identity, so should only support federation via SAML/OAUTH from an IdP
+
+##  Docs
 
 [webhooks]: https://webhook.site/41eda23e-69ad-4fc7-8193-d888231a152d
 [publishing-private-modules]: https://www.terraform.io/cloud-docs/registry/publish-modules#publishing-private-modules-to-the-terraform-cloud-private-registry

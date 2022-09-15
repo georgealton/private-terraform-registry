@@ -1,21 +1,27 @@
 #!/bin/sh
 
+# Build
 TEMPLATE='template.yaml'
 BUCKET='cf-templates-1491x2vk47ot9-eu-west-1'
 STACK='private-terraform-registry'
+OUTPUT_TEMAPLTE='packaged-template'
 
-aws cloudformation package --template "$TEMPLATE" --s3-bucket "$BUCKET" --output-template-file 'packaged-template'
+
+aws cloudformation package \
+    --template "$TEMPLATE" \
+    --s3-bucket "$BUCKET" \
+    --output-template-file "$OUTPUT_TEMAPLTE"
 
 aws cloudformation deploy \
-    --template-file 'packaged-template' \
+    --template-file "$OUTPUT_TEMAPLTE" \
     --stack-name "$STACK" \
     --capabilities 'CAPABILITY_NAMED_IAM' \
     --disable-rollback \
     --no-fail-on-empty-changeset \
     --parameter-overrides 'file://parameters.json'
 
+# Integration Test
 BASE_URL="https://terraform.georgealton.com"
-
 ###
 echo "When we list versions for a module"
 echo "The api returns a list of versions"

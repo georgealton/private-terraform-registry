@@ -1,0 +1,10 @@
+StartAt: Configuration
+States:
+    Configuration:
+        Type: Pass
+        Next: Router
+    Router:
+        Type: Choice
+        Choices:
+            -   Variables
+                StringEquals: ""
