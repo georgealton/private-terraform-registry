@@ -1,10 +1,58 @@
+Comment: Routes GitHub Webhook Events
 StartAt: Configuration
 States:
     Configuration:
         Type: Pass
-        Next: Router
-    Router:
+        Next: Route WebHook
+    Route WebHook:
         Type: Choice
         Choices:
-            -   Variables
-                StringEquals: ""
+            -
+                And:
+                    -
+                        Not:
+                            Variable: $.action
+                            IsPresent: true
+                    -
+                        Variable: $.ref_type
+                        StringEquals: tag
+                Comment: Tag Action
+                Next: Translate Tag Event
+            -
+                Variable: $.x-github-event
+                StringEquals: installation
+                Comment: GitHub App Installation
+                Next: Translate App Installation Event
+            -
+                Variable: $.x-github-event
+                StringEquals: repository
+                Comment: Repository Event
+                Next: Translate Repository Event
+        Default: Unhandled WebHook Event
+    Translate App Installation Event:
+        Type: Pass
+        Next: EventBridge PutEvents
+    Translate Repository Event:
+        Type: Pass
+        Next: EventBridge PutEvents
+    Translate Tag Event:
+        Type: Pass
+        Next: EventBridge PutEvents
+    EventBridge PutEvents:
+        Type: Task
+        Resource: 'arn:aws:states:::events:putEvents.waitForTaskToken'
+        Parameters:
+            Entries:
+                -
+                    Detail:
+                        Message: Hello from Step Functions!
+                        TaskToken.$: $$.Task.Token
+                    DetailType: MyDetailType
+                    EventBusName: MyEventBusName
+                    Source: MySource
+        Next: Success
+    Success:
+        Type: Succeed
+    Unhandled WebHook Event:
+        Type: Succeed
+        Comment: We don't currently handle this event

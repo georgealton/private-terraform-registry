@@ -6,7 +6,6 @@ BUCKET='cf-templates-1491x2vk47ot9-eu-west-1'
 STACK='private-terraform-registry'
 OUTPUT_TEMAPLTE='packaged-template'
 
-
 aws cloudformation package \
     --template "$TEMPLATE" \
     --s3-bucket "$BUCKET" \
@@ -55,6 +54,6 @@ http --ignore-stdin \
     --timeout 5 \
     --follow \
     "${BASE_URL}/webhooks/github" \
-    "X-GITHUB-EVENT:repository" "CONTENT-TYPE:application/json" '@data/github/events/tag-added.json'
+    "X-GITHUB-EVENT:repository" "CONTENT-TYPE:application/json" '@data/github/events/body-tag-added.json'
 # http --follow "${BASE_URL}/webhooks/github" "X-GITHUB-EVENT:repository" "CONTENT-TYPE:application/json" '@data/github-repository-created.json'
 # http --follow "${BASE_URL}/webhooks/github" "X-GITHUB-EVENT:installation" "CONTENT-TYPE:application/json" '@data/github-app-installation.json'

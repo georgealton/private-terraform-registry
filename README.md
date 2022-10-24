@@ -68,7 +68,6 @@ Browse and Discover Terraform modules that exist in your registry.
 ## Authentication
 
 [terraform-cli-registry-auth][https://www.terraform.io/cli/config/config-file#credentials-1]
-
 [https://www.terraform.io/cli/config/config-file#environment-variable-credentials]
 
 ```sh
@@ -145,7 +144,7 @@ must follow
 - Supply a Certificate
 - Generate an ACM certificate
 
-### Source Control Integration
+### VCS Integration
 
 ## GitHub
 
@@ -165,14 +164,20 @@ Resources to connect your private module registry with a GitHub Account or Organ
 ### Storage Backend
 
 Q. Is separate Storage Backend Necessary? Can we rely on VCS access?
-  - Isolates Registry from VCS
-  - Adds Complexity to codebase
-  - Duplicates storage
-  - Simplifies Access Control?
+
+- Isolates Registry from VCS
+- Adds Complexity to codebase
+- Duplicates storage
+- Simplifies Access Control?
 
 ## S3
 
 [s3-bucket-source]
+
+### Using State machine for webhooks
+
+- Easier to build integrations with than VTL
+-
 
 ### Test
 
