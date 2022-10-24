@@ -1,17 +1,19 @@
 Transform: AWS::Serverless-2016-10-31
 
 Parameters:
+  ParentDomain:
+    Type: String
+    Description: Your domain name, eh megacorp.com
+
   DomainName:
     Type: String
-    Description: >
-      Usually like terraform.<your parent domain>
+    Description: name of subdomain for registry, eg terraform
 
   CertificateARN:
     Type: String
     Description: >
       If you already have a certificate in AWS Certificate Manager that covers the DomainName supply the ARN here. This will skip creation
       of a new certificate.
-    Default: ""
 
   APIEndpointType:
     Type: String
@@ -27,6 +29,8 @@ Conditions:
   RegionalAPIEndpoint: !Equals [!Ref APIEndpointType, REGIONAL]
 
 Resources:
+  DeletionPolicy: Retain
+  UpdateReplacePolicy: Retain
   Storage:
     Type: AWS::S3::Bucket
     Properties:
@@ -53,11 +57,10 @@ Resources:
       NotificationConfiguration:
         EventBridgeConfiguration:
           EventBridgeEnabled: true
-      Tags:
-        - Key: Name
-          Value: TFRegistry
 
   DB:
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Type: AWS::DynamoDB::Table
     Properties:
       KeySchema:
@@ -73,19 +76,13 @@ Resources:
       BillingMode: PAY_PER_REQUEST
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: true
-      Tags:
-        - Key: Name
-          Value: TFRegistry
 
   Certificate:
     Condition: CreateCertificate
     Type: AWS::CertificateManager::Certificate
     Properties:
-      DomainName: !Ref DomainName
+      DomainName: !Sub ${ParentDomain}.${DomainName}
       ValidationMethod: DNS
-      Tags:
-        - Key: Name
-          Value: TFRegistry
 
   APIDomainName:
     Type: AWS::ApiGateway::DomainName
@@ -97,10 +94,7 @@ Resources:
       EndpointConfiguration:
         Types:
           - !Ref APIEndpointType
-      DomainName: !Ref DomainName
-      Tags:
-        - Key: Name
-          Value: TFRegistry
+      DomainName: !Sub ${ParentDomain}.${DomainName}
 
   RegistryMapping:
     Type: AWS::ApiGateway::BasePathMapping
@@ -133,8 +127,6 @@ Resources:
           Name: AWS::Include
           Parameters:
             Location: openapi.yaml
-      Tags:
-        Name: TFRegistry
 
   Role:
     Type: AWS::IAM::Role
@@ -157,9 +149,38 @@ Resources:
                   - dynamodb:GetItem
                   - dynamodb:Query
                 Resource: !GetAtt DB.Arn
-      Tags:
-        - Key: Name
-          Value: TFRegistry
+              - Effect: Allow
+                Action:
+                  - stepfunctions:StateExecution
+                Resource: !GetAtt GitHubEventRouter.Arn
+
+  EventRouterRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: !Sub states.${AWS::Region}.${AWS::URLSuffix}
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: WriteEvents
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - events:PutEvents
+                Resource: !GetAtt EventBus.Arn
+
+  GitHubWebHookRouter:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      DefinitionS3Location: webhook-github.asl.yaml
+      RoleArn: !GetAtt EventRouterRole.Arn
+      TracingConfiguration:
+        Enabled: True
 
   EventBus:
     Type: AWS::Events::EventBus
@@ -169,7 +190,6 @@ Resources:
   WebHookRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: EventBridgeAccess
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -214,9 +234,11 @@ Resources:
             Action: sts:AssumeRole
 
   UserPool:
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Type: AWS::Cognito::UserPool
 
-  UserPoolClient:
+  UserClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
       UserPoolId: !Ref UserPool
@@ -225,20 +247,21 @@ Resources:
     Type: AWS::Cognito::UserPoolClient
     Properties:
       UserPoolId: !Ref UserPool
+      ClientName: VCS_OIDC_CLIENT
       AllowedOAuthFlows:
         - client_credentials
 
   IdentityProvider:
     Type: AWS::Cognito::UserPoolIdentityProvider
     Properties:
-      ProviderName: Okta
+      ProviderName: IdentityProvider
       ProviderType: OIDC
       UserPoolId: !Ref UserPool
 
   UserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
-      Domain: TODO
+      Domain: !Ref ParentDomain
       UserPoolId: !Ref UserPool
 
 Outputs:
@@ -246,3 +269,11 @@ Outputs:
     Condition: RegionalAPIEndpoint
     Description: Create a DNS record <DomainName> for pointing to this DomainName
     Value: !GetAtt APIDomainName.RegionalDomainName
+
+  OIDCWellKnownCOnfigurationUrl:
+    Description: OIDC /.well-known/openid-configuration Url
+    Value: !Sub "https://cognito-idp.${AWS::Region}.amazonaws.com/${UserPool}/.well-known/openid-configuration"
+
+  OIDCJWKSJSONUrl:
+    Description: OIDC /.well-known/jwks.json Url"
+    Value: !Sub "https://cognito-idp.${AWS::Region}.amazonaws.com/${UserPool}/.well-known/jwks.json"

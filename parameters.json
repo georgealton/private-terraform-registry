@@ -1,6 +1,10 @@
 [
   {
+    "ParameterKey": "ParentDomain",
+    "ParameterValue": "georgealton.com"
+  },
+  {
     "ParameterKey": "DomainName",
-    "ParameterValue": "terraform.georgealton.com"
+    "ParameterValue": "terraform"
   }
 ]
