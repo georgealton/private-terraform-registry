@@ -174,7 +174,16 @@ Q. Is separate Storage Backend Necessary? Can we rely on VCS access?
 
 [s3-bucket-source]
 
-### Using State machine for webhooks
+## ADR
+
+- DynamoDB for backend
+- Event Driven Architecture using event bridge
+
+## Using State machine for API
+
+experimented with VTL but became tricky to use with advanced use case, difficult to extend and modify. It also enables use of the built in JWT authorizer.
+
+switched to SFN instead.
 
 - Easier to build integrations with than VTL
 -
@@ -186,6 +195,8 @@ Q. Is separate Storage Backend Necessary? Can we rely on VCS access?
 Users should be able to browse the registry
 Don't want to manage Identity, so should only support federation via SAML/OAUTH from an IdP
 
+
+https://www.samltool.com/sp_metadata.php
 ##  Docs
 
 [webhooks]: https://webhook.site/41eda23e-69ad-4fc7-8193-d888231a152d

@@ -14,6 +14,7 @@ Parameters:
     Description: >
       If you already have a certificate in AWS Certificate Manager that covers the DomainName supply the ARN here. This will skip creation
       of a new certificate.
+    Default: ""
 
   APIEndpointType:
     Type: String
@@ -24,13 +25,16 @@ Parameters:
       - EDGE
     Default: REGIONAL
 
+  SAMLMetadataURL:
+    Type: String
+    Default: ""
+
 Conditions:
   CreateCertificate: !Equals [!Ref CertificateARN, ""]
   RegionalAPIEndpoint: !Equals [!Ref APIEndpointType, REGIONAL]
+  SAMLIdP: !Not [!Equals [!Ref SAMLMetadataURL, ""]]
 
 Resources:
-  DeletionPolicy: Retain
-  UpdateReplacePolicy: Retain
   Storage:
     Type: AWS::S3::Bucket
     Properties:
@@ -59,8 +63,6 @@ Resources:
           EventBridgeEnabled: true
 
   DB:
-    DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
     Type: AWS::DynamoDB::Table
     Properties:
       KeySchema:
@@ -81,27 +83,8 @@ Resources:
     Condition: CreateCertificate
     Type: AWS::CertificateManager::Certificate
     Properties:
-      DomainName: !Sub ${ParentDomain}.${DomainName}
+      DomainName: !Sub ${DomainName}.${ParentDomain}
       ValidationMethod: DNS
-
-  APIDomainName:
-    Type: AWS::ApiGateway::DomainName
-    Properties:
-      RegionalCertificateArn: !If
-        - CreateCertificate
-        - !Ref Certificate
-        - !Ref CertificateARN
-      EndpointConfiguration:
-        Types:
-          - !Ref APIEndpointType
-      DomainName: !Sub ${ParentDomain}.${DomainName}
-
-  RegistryMapping:
-    Type: AWS::ApiGateway::BasePathMapping
-    Properties:
-      DomainName: !Ref DomainName
-      RestApiId: !Ref API
-      Stage: main
 
   API:
     DependsOn:
@@ -109,6 +92,9 @@ Resources:
       - WebHookRole
     Type: AWS::Serverless::Api
     Properties:
+      Domain:
+        CertificateArn: !Ref Certificate
+        DomainName: !Sub ${DomainName}.${ParentDomain}
       StageName: main
       EndpointConfiguration:
         Type: !Ref APIEndpointType
@@ -152,7 +138,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - stepfunctions:StateExecution
-                Resource: !GetAtt GitHubEventRouter.Arn
+                Resource: !GetAtt GitHubWebHookRouter.Arn
 
   EventRouterRole:
     Type: AWS::IAM::Role
@@ -177,7 +163,7 @@ Resources:
   GitHubWebHookRouter:
     Type: AWS::StepFunctions::StateMachine
     Properties:
-      DefinitionS3Location: webhook-github.asl.yaml
+      DefinitionS3Location: src/entrypoints/webhooks-github.asl.yaml
       RoleArn: !GetAtt EventRouterRole.Arn
       TracingConfiguration:
         Enabled: True
@@ -217,7 +203,7 @@ Resources:
         ZipFile: |
           exports.handler = (event, context) => console.log("hello world")
       Runtime: nodejs16.x
-      Role: !Ref AuthorizerExecutionRole
+      Role: !GetAtt AuthorizerExecutionRole.Arn
       TracingConfig:
         Mode: Active
       MemorySize: 128
@@ -234,42 +220,52 @@ Resources:
             Action: sts:AssumeRole
 
   UserPool:
-    DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
     Type: AWS::Cognito::UserPool
 
   UserClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
+      ClientName: USER_CLIENT
       UserPoolId: !Ref UserPool
+      CallbackURLs:
+        - http://localhost
+      DefaultRedirectURI: http://localhost
+      AllowedOAuthFlowsUserPoolClient: true
+      ReadAttributes:
+        - email
+      AllowedOAuthFlows:
+        - code
+      AllowedOAuthScopes:
+        - email
+        - openid
+      SupportedIdentityProviders:
+        - !If [SAMLIdP, !Ref SAMLIdentityProvider, !Ref AWS::NoValue]
 
   VCSClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
       UserPoolId: !Ref UserPool
-      ClientName: VCS_OIDC_CLIENT
-      AllowedOAuthFlows:
-        - client_credentials
+      ClientName: VCS_CLIENT
 
-  IdentityProvider:
+  SAMLIdentityProvider:
+    Condition: SAMLIdP
     Type: AWS::Cognito::UserPoolIdentityProvider
     Properties:
-      ProviderName: IdentityProvider
-      ProviderType: OIDC
+      ProviderName: SAMLIdentityProvider
+      ProviderType: SAML
       UserPoolId: !Ref UserPool
+      ProviderDetails:
+        MetadataURL: !Ref SAMLMetadataURL
+      AttributeMapping:
+        email: "Attribute"
 
   UserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
-      Domain: !Ref ParentDomain
       UserPoolId: !Ref UserPool
+      Domain: !Ref API # TODO -- this is a lowercase unique enough ide
 
 Outputs:
-  APIDomainName:
-    Condition: RegionalAPIEndpoint
-    Description: Create a DNS record <DomainName> for pointing to this DomainName
-    Value: !GetAtt APIDomainName.RegionalDomainName
-
   OIDCWellKnownCOnfigurationUrl:
     Description: OIDC /.well-known/openid-configuration Url
     Value: !Sub "https://cognito-idp.${AWS::Region}.amazonaws.com/${UserPool}/.well-known/openid-configuration"

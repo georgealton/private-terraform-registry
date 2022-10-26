@@ -6,5 +6,9 @@
   {
     "ParameterKey": "DomainName",
     "ParameterValue": "terraform"
+  },
+  {
+    "ParameterKey": "SAMLMetadataURL",
+    "ParameterValue": "https://samltest.id/saml/idp"
   }
 ]
