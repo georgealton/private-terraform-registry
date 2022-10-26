@@ -9,6 +9,6 @@
   },
   {
     "ParameterKey": "SAMLMetadataURL",
-    "ParameterValue": "https://samltest.id/saml/idp"
+    "ParameterValue": "https://georgealton.eu.auth0.com/samlp/metadata/XzkgPqk1kquLLKcgbRjhJIMCHyNq2cHd"
   }
 ]
