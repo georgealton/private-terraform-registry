@@ -3,6 +3,9 @@ StartAt: Configuration
 States:
     Configuration:
         Type: Pass
+        Next: Verify Event
+    Verify Event:
+        Type: Pass
         Next: Route WebHook
     Route WebHook:
         Type: Choice

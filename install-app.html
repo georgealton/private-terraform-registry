@@ -1,0 +1,26 @@
+<form action="https://github.com/organizations/gerogealton/settings/apps/new?state=abc123" method="post">
+    Create a GitHub App Manifest: <input type="text" name="manifest" id="manifest"><br>
+    <input type="submit" value="Submit">
+   </form>
+
+   <script>
+    input = document.getElementById("manifest")
+    input.value = JSON.stringify({
+      "name": "Octoapp",
+      "url": "https://www.example.com",
+      "hook_attributes": {
+        "url": "https://terraform.georgealton.com/webhooks/github",
+      },
+      "redirect_url": "https://terraform.georgealton.com",
+      "callback_urls": [
+        "https://terraform.georgealton.com/webhooks/github"
+      ],
+      "public": false,
+      "default_permissions": {
+        ""
+      },
+      "default_events": [
+        "create", "repository"
+      ]
+    })
+   </script>
