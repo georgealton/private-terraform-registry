@@ -6,5 +6,9 @@
   {
     "ParameterKey": "DomainName",
     "ParameterValue": "terraform"
+  },
+  {
+    "ParameterKey": "SAMLMetadataURL",
+    "ParameterValue": "https://georgealton.eu.auth0.com/samlp/metadata/XzkgPqk1kquLLKcgbRjhJIMCHyNq2cHd"
   }
 ]
