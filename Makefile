@@ -1,4 +1,4 @@
-BUILD_DIR := ./build
+BUILD_DIR := .build/
 
 TEMPLATE := template.yaml
 BUCKET := cf-templates-1491x2vk47ot9-eu-west-1
@@ -8,6 +8,7 @@ PARAMETERS_FILE := parameters.json
 .PHONY: clean deploy test
 
 ${BUILD_DIR}/packaged.yaml:
+	mkdir -p ${BUILD_DIR}
 	aws cloudformation package --template "${TEMPLATE}" --s3-bucket "${BUCKET}" --output-template-file "$@"
 
 deploy: ${BUILD_DIR}/packaged.yaml
