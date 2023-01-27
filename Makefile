@@ -1,7 +1,7 @@
 BUILD_DIR := .build
 
 TEMPLATE := template.yaml
-BUILT_TEMPLATE = packaged.yaml
+BUILT_TEMPLATE := packaged.yaml
 BUCKET := cf-templates-1491x2vk47ot9-eu-west-1
 STACK := private-terraform-registry
 PARAMETERS_FILE := parameters.json
