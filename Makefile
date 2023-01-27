@@ -8,8 +8,10 @@ PARAMETERS_FILE := parameters.json
 
 .PHONY: clean deploy test
 
-${BUILD_DIR}/$(BUILT_TEMPLATE):
-	mkdir -p "${BUILD_DIR}"
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
+${BUILD_DIR}/$(BUILT_TEMPLATE): | $(BUILD_DIR)
 	aws cloudformation package --template "${TEMPLATE}" --s3-bucket "${BUCKET}" --output-template-file "$@"
 
 deploy: ${BUILD_DIR}/$(BUILT_TEMPLATE)
