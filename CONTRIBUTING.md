@@ -7,7 +7,7 @@
 ```console
 python3 -m venv .venv
 . .venv/bin/activate
-python -m pip install --quiet --requirement 'dev-requirements.txt'
+python -m pip install --quiet --requirement 'requirements.txt'
 ```
 
 Then verify by running the tests
