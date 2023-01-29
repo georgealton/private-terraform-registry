@@ -29,11 +29,3 @@ class TestDownloadModuleVersion:
         response = requests.get(url)
         assert response.status_code == 200
 
-
-# http --ignore-stdin \
-#     --timeout 5 \
-#     --follow \
-#     "${BASE_URL}/webhooks/github" \
-#     "X-GITHUB-EVENT:repository" "CONTENT-TYPE:application/json" '@data/github/events/body-tag-added.json'
-# http --follow "${BASE_URL}/webhooks/github" "X-GITHUB-EVENT:repository" "CONTENT-TYPE:application/json" '@data/github-repository-created.json'
-# http --follow "${BASE_URL}/webhooks/github" "X-GITHUB-EVENT:installation" "CONTENT-TYPE:application/json" '@data/github-app-installation.json'
