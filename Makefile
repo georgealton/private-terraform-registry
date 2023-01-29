@@ -23,4 +23,4 @@ clean:
 	aws cloudformation wait stack-delete-complete --stack-name "${STACK}"
 
 test: deploy
-	./integration_test.sh
+	pytest

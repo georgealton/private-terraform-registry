@@ -136,8 +136,7 @@ Resources:
                   - dynamodb:Query
                 Resource: !GetAtt DB.Arn
               - Effect: Allow
-                Action:
-                  - stepfunctions:StateExecution
+                Action: stepfunctions:StateExecution
                 Resource: !GetAtt GitHubWebHookRouter.Arn
 
   EventRouterRole:
@@ -156,8 +155,7 @@ Resources:
             Version: "2012-10-17"
             Statement:
               - Effect: Allow
-                Action:
-                  - events:PutEvents
+                Action: events:PutEvents
                 Resource: !GetAtt EventBus.Arn
 
   GitHubWebHookRouter:
