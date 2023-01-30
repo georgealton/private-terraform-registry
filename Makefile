@@ -6,7 +6,7 @@ BUCKET := cf-templates-1491x2vk47ot9-eu-west-1
 STACK := private-terraform-registry
 PARAMETERS_FILE := parameters.json
 
-.PHONY: clean deploy test
+.PHONY: clean deploy test undeploy
 
 ${BUILD_DIR}:
 	mkdir -p ${BUILD_DIR}
@@ -17,10 +17,12 @@ ${BUILD_DIR}/${BUILT_TEMPLATE}: | ${BUILD_DIR}
 deploy: ${BUILD_DIR}/${BUILT_TEMPLATE}
 	aws cloudformation deploy --template-file "$^" --stack-name "${STACK}" --capabilities 'CAPABILITY_NAMED_IAM' --no-fail-on-empty-changeset --parameter-overrides "file://${PARAMETERS_FILE}"
 
-clean:
-	rm -r ${BUILD_DIR}
+undeploy:
 	aws cloudformation delete-stack --stack-name "${STACK}"
 	aws cloudformation wait stack-delete-complete --stack-name "${STACK}"
+
+clean: undeploy
+	rm -r ${BUILD_DIR}
 
 test: deploy
 	pytest
