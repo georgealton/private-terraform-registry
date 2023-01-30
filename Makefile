@@ -15,7 +15,7 @@ ${BUILD_DIR}/${BUILT_TEMPLATE}: | ${BUILD_DIR}
 	aws cloudformation package --template "${TEMPLATE}" --s3-bucket "${BUCKET}" --output-template-file "$@"
 
 deploy: ${BUILD_DIR}/${BUILT_TEMPLATE}
-	aws cloudformation deploy --template-file "$^" --stack-name "${STACK}" --capabilities 'CAPABILITY_NAMED_IAM' --no-fail-on-empty-changeset --parameter-overrides "file://${PARAMETERS_FILE}" --no-execute-changeset
+	aws cloudformation deploy --template-file "$^" --stack-name "${STACK}" --capabilities 'CAPABILITY_NAMED_IAM' --no-fail-on-empty-changeset --parameter-overrides "file://${PARAMETERS_FILE}"
 
 clean:
 	rm -r ${BUILD_DIR}
