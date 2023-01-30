@@ -40,7 +40,7 @@ paths:
             statusCode: 200
             responseTemplates:
               application/json: >-
-                {"modules.v1": "https://$context.domainName/terraform/modules/v1"}
+                {"modules.v1": "https://$context.domainName/terraform/modules/v1/"}
   /terraform/modules/v1/{namespace}/{name}/{provider}/versions:
     get:
       responses:
