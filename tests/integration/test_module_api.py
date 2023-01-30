@@ -3,7 +3,7 @@ from http import HTTPStatus
 import requests
 
 BASE_URL = "https://terraform.georgealton.com"
-content_type = types_map[".json"]
+CONTENT_TYPE = types_map[".json"]
 
 
 class TestServiceDiscovery:
@@ -12,7 +12,7 @@ class TestServiceDiscovery:
         response = requests.get(url)
         body = response.json()
         assert response.status_code == HTTPStatus.OK
-        assert response.headers["Content-Type"] == content_type
+        assert response.headers["Content-Type"] == CONTENT_TYPE
         assert body == {"modules.v1": f"{BASE_URL}/terraform/modules/v1/"}
 
 
@@ -21,7 +21,7 @@ class TestListModuleVersions:
         url = f"{BASE_URL}/terraform/modules/v1/A/B/C/versions"
         response = requests.get(url)
         assert response.status_code == HTTPStatus.OK
-        assert response.headers["Content-Type"] == content_type
+        assert response.headers["Content-Type"] == CONTENT_TYPE
 
     def test_returns_404_when_there_are_no_module_versions(self):
         url = f"{BASE_URL}/terraform/modules/v1/X/X/X/versions"
@@ -43,4 +43,4 @@ class TestDownloadModuleVersion:
         url = f"{BASE_URL}/terraform/modules/v1/A/B/C/0.0.0/download"
         response = requests.get(url)
         assert response.status_code == HTTPStatus.NOT_FOUND
-        assert response.headers["Content-Type"] == content_type
+        assert response.headers["Content-Type"] == CONTENT_TYPE
