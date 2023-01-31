@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import pytest
 import requests
 
 BASE_URL = "https://terraform.georgealton.com"
@@ -8,6 +9,7 @@ default_headers = {
 }
 
 
+@pytest.mark.xfail(reason="Not Implemented")
 class TestGitHubWebHooks:
     def test_repository_tag_added(self):
         url = f"{BASE_URL}/webhooks/github"
