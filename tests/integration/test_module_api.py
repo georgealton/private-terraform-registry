@@ -13,7 +13,7 @@ class TestServiceDiscovery:
         body = response.json()
         assert response.status_code == HTTPStatus.OK
         assert response.headers["Content-Type"] == CONTENT_TYPE
-        assert body["modules.v1"] == f"{BASE_URL}/terraform/modules/v1/"}
+        assert body["modules.v1"] == f"{BASE_URL}/terraform/modules/v1/"
 
 
 class TestListModuleVersions:
