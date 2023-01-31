@@ -95,6 +95,7 @@ Resources:
       Domain:
         CertificateArn: !Ref Certificate
         DomainName: !Sub ${DomainName}.${ParentDomain}
+        HostedZoneName: !Ref ParentDomain 
       StageName: main
       EndpointConfiguration:
         Type: !Ref APIEndpointType
