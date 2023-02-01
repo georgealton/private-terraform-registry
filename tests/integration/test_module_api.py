@@ -21,8 +21,10 @@ class TestListModuleVersions:
     def test_returns_a_list_of_versions(self):
         url = f"{MODULES_V1_URL}A/B/C/versions"
         response = requests.get(url)
+        body = response.json()
         assert response.status_code == HTTPStatus.OK
         assert response.headers["Content-Type"] == CONTENT_TYPE
+        assert body == {"modules": [{"versions": [{"version": "1.0.0"}]}]}
 
     def test_returns_404_when_there_are_no_module_versions(self):
         url = f"{MODULES_V1_URL}X/X/X/versions"
