@@ -5,7 +5,7 @@ import boto3
 
 
 def db_connection():
-    table = ""
+    table = "..."
     dynamodb = boto3.resource("dynamodb")
     yield dynamodb.Table(table)
 

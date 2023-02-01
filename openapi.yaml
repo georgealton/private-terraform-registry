@@ -87,10 +87,10 @@ paths:
               },
               "ExpressionAttributeValues": {
                 ":v0": {
-                  "S": "NAMESPACE#${namespace}#NAME#${name}#PROVIDER#${provider}"
+                  "S": "NAMESPACE#${namespace}"
                 },
                 ":v1": {
-                  "S": "VERSION#"
+                  "S": "NAME#${name}#PROVIDER#${provider}#VERSION#"
                 }
               },
               "ProjectionExpression": "#data.#version"
@@ -146,10 +146,10 @@ paths:
               "TableName": "$stageVariables.registry_db",
               "Key": {
                 "pk": {
-                  "S": "NAMESPACE#${namespace}#NAME#${name}#PROVIDER#${provider}"
+                  "S": "NAMESPACE#${namespace}"
                 },
                 "sk": {
-                  "S": "VERSION#${version}"
+                  "S": "NAME#${name}#PROVIDER#${provider}#VERSION#${version}"
                 }
               },
               "ProjectionExpression": "#data.#url",
