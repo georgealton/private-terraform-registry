@@ -195,8 +195,8 @@ switched to SFN instead.
 Users should be able to browse the registry
 Don't want to manage Identity, so should only support federation via SAML/OAUTH from an IdP
 
+<https://www.samltool.com/sp_metadata.php>
 
-https://www.samltool.com/sp_metadata.php
 ##  Docs
 
 [webhooks]: https://webhook.site/41eda23e-69ad-4fc7-8193-d888231a152d
