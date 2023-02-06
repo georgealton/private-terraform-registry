@@ -36,7 +36,7 @@ class TestGitHubWebHooks:
         response = requests.post(url, data=data.read_text(), headers=headers)
         assert response.status_code == 204
 
-    def test_repository_deleted(self):
+    def test_app_installed(self):
         url = urljoin(BASE_URL, "webhooks/github")
         data = Path("./data/github/events/body-app-installed.json")
         github_event_header = {"X-GITHUB-EVENT": "repository"}
