@@ -13,7 +13,8 @@ default_headers = {
 @pytest.mark.xfail(reason="Not Implemented")
 class TestGitHubWebHooks:
     def test_repository_tag_added(self):
-        url = urljoin(BASE_URL, "webhooks/github")
+        path = "webhooks/github"
+        url = urljoin(BASE_URL, path)
         data = Path("./data/github/events/body-tag-added.json")
         github_event_header = {"X-GITHUB-EVENT": "repository"}
         headers = default_headers | github_event_header
@@ -23,7 +24,8 @@ class TestGitHubWebHooks:
         assert response.status_code == 204
 
     def test_repository_created(self):
-        url = urljoin(BASE_URL, "webhooks/github")
+        path = "webhooks/github"
+        url = urljoin(BASE_URL, path)
         data = Path("./data/github/events/body-repository-created.json")
         github_event_header = {"X-GITHUB-EVENT": "repository"}
         headers = default_headers | github_event_header
@@ -33,7 +35,8 @@ class TestGitHubWebHooks:
         assert response.status_code == 204
 
     def test_repository_deleted(self):
-        url = urljoin(BASE_URL, "webhooks/github")
+        path = "webhooks/github"
+        url = urljoin(BASE_URL, path)
         data = Path("./data/github/events/body-repository-deleted.json")
         github_event_header = {"X-GITHUB-EVENT": "repository"}
         headers = default_headers | github_event_header
@@ -43,7 +46,8 @@ class TestGitHubWebHooks:
         assert response.status_code == 204
 
     def test_app_installed(self):
-        url = urljoin(BASE_URL, "webhooks/github")
+        path = "webhooks/github"
+        url = urljoin(BASE_URL, path)
         data = Path("./data/github/events/body-app-installed.json")
         github_event_header = {"X-GITHUB-EVENT": "repository"}
         headers = default_headers | github_event_header
