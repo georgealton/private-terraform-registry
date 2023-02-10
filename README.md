@@ -176,8 +176,7 @@ Q. Is separate Storage Backend Necessary? Can we rely on VCS access?
 
 ## ADR
 
-- DynamoDB for backend
-- Event Driven Architecture using event bridge
+We will store [ADR](./docs/adr/) to record major key architectural decisions made with this project.
 
 ## Using State machine for API
 
