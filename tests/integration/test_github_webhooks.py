@@ -20,7 +20,7 @@ class TestGitHubWebHooks:
         response = requests.post(
             url, data=data.read_text(), headers=headers, timeout=30
         )
-        assert response.status_code == 204
+        assert response.status_code == 202
 
     def test_repository_tag_added(self, request):
         path = "webhooks/github"
@@ -31,7 +31,7 @@ class TestGitHubWebHooks:
         response = requests.post(
             url, data=data.read_text(), headers=headers, timeout=30
         )
-        assert response.status_code == 204
+        assert response.status_code == 202
 
     def test_repository_created(self, request):
         path = "webhooks/github"
@@ -42,7 +42,7 @@ class TestGitHubWebHooks:
         response = requests.post(
             url, data=data.read_text(), headers=headers, timeout=30
         )
-        assert response.status_code == 204
+        assert response.status_code == 202
 
     def test_repository_deleted(self, request):
         path = "webhooks/github"
@@ -53,4 +53,4 @@ class TestGitHubWebHooks:
         response = requests.post(
             url, data=data.read_text(), headers=headers, timeout=30
         )
-        assert response.status_code == 204
+        assert response.status_code == 202
