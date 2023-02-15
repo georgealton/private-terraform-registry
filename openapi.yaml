@@ -233,7 +233,7 @@ paths:
           in: header
 
       responses:
-        "204":
+        "202":
           description: ""
       x-amazon-apigateway-integration:
         type: http
