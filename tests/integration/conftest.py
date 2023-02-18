@@ -4,7 +4,6 @@ from pathlib import Path
 
 import boto3
 import pytest
-import docker
 import requests
 
 
@@ -40,25 +39,6 @@ def github_organization(request):
     }
 
     response = requests.post(url, data=data, cookies=cookies)
-
-
-@pytest.fixture()
-def docker_client():
-    yield docker.from_env()
-
-
-@pytest.fixture()
-def terraform(request, docker_client):
-    image = "hashicorp/terraform"
-    container = docker_client.containers.run(
-        image,
-        detach=True,
-        volumes={
-            request.path.parent / "data/terraform": {"bind": "/terraform", "mode": "rw"}
-        },
-    )
-    yield container
-    container.remove(force=True)
 
 
 def db_connection():
