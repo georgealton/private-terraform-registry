@@ -23,5 +23,6 @@ jobs:
         with:
           python-version: "3.9"
           cache: "pip"
+      - uses: hashicorp/setup-terraform@v2
       - run: pip install -r requirements.txt
       - run: make acceptance_test

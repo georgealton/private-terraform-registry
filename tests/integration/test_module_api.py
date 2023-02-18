@@ -45,7 +45,7 @@ class TestDownloadModuleVersion:
         url = urljoin(MODULES_V1_URL, path)
         response = requests.get(url, timeout=30)
         assert response.status_code == HTTPStatus.NO_CONTENT
-        assert response.headers["X-TERRAFORM-GET"] == "https://blah.com"
+        assert response.headers["X-TERRAFORM-GET"] == "http://localhost:8000/src.tgz"
         assert response.headers["Content-Length"] == "0"
 
     def test_returns_404_error_when_module_version_does_not_exist(self):
