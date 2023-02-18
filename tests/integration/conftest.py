@@ -8,6 +8,21 @@ import requests
 
 
 @pytest.fixture()
+def parameters(request):
+    parameters_file = request.path.parent.parent.parent / "parameters.json"
+    param_data = json.loads(parameters_file.read_text())
+    return {
+        parameter["ParameterKey"]: parameter["ParameterValue"]
+        for parameter in param_data
+    }
+
+
+@pytest.fixture
+def host(parameters):
+    yield f"{parameters['DomainName']}.{parameters['ParentDomain']}"
+
+
+@pytest.fixture()
 def github_organization(request):
     """This uses a Private API -- gitHub doesn't allow creation of orgs. this has"""
     request.add_marker(pytest.mark.interactive)
