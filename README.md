@@ -47,6 +47,8 @@ X-Terraform-Get: https://api.github.com/repos/hashicorp/terraform-aws-consul/tar
 Terraform documentation uses provider and system for a module interchangeably. I've opted to use provider
 because that seems more common in terraform nomenclature.
 
+## Terraform needs the values to be lowercase
+
 ### Module Versions (Primary Index)
 
 Provides:

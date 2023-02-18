@@ -48,9 +48,15 @@ def docker_client():
 
 
 @pytest.fixture()
-def terraform(docker_client):
+def terraform(request, docker_client):
     image = "hashicorp/terraform"
-    container = docker_client.containers.run(image, detach=True)
+    container = docker_client.containers.run(
+        image,
+        detach=True,
+        volumes={
+            request.path.parent / "data/terraform": {"bind": "/terraform", "mode": "rw"}
+        },
+    )
     yield container
     container.remove(force=True)
 

@@ -22,7 +22,7 @@ class TestServiceDiscovery:
 
 class TestListModuleVersions:
     def test_returns_a_list_of_versions(self):
-        path = "A/B/C/versions"
+        path = "a/b/c/versions"
         url = urljoin(MODULES_V1_URL, path)
         response = requests.get(url, timeout=30)
         body = response.json()
@@ -31,7 +31,7 @@ class TestListModuleVersions:
         assert body == {"modules": [{"versions": [{"version": "1.0.0"}]}]}
 
     def test_returns_404_when_there_are_no_module_versions(self):
-        path = "X/X/X/versions"
+        path = "x/x/x/versions"
         url = urljoin(MODULES_V1_URL, path)
         response = requests.get(url, timeout=30)
         response_data = response.json()
@@ -41,7 +41,7 @@ class TestListModuleVersions:
 
 class TestDownloadModuleVersion:
     def test_returns_x_terraform_get_header(self):
-        path = "A/B/C/1.0.0/download"
+        path = "a/b/c/1.0.0/download"
         url = urljoin(MODULES_V1_URL, path)
         response = requests.get(url, timeout=30)
         assert response.status_code == HTTPStatus.NO_CONTENT
@@ -49,7 +49,7 @@ class TestDownloadModuleVersion:
         assert response.headers["Content-Length"] == "0"
 
     def test_returns_404_error_when_module_version_does_not_exist(self):
-        path = "A/B/C/0.0.0/download"
+        path = "a/b/c/0.0.0/download"
         url = urljoin(MODULES_V1_URL, path)
         response = requests.get(url, timeout=30)
         assert response.status_code == HTTPStatus.NOT_FOUND
