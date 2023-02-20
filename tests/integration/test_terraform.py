@@ -11,7 +11,12 @@ def module_server(request):
 
     class ModuleServer(HTTPServer):
         def finish_request(self, request, client_address):
-            self.RequestHandlerClass(request, client_address, self, directory=module_dir)
+            self.RequestHandlerClass(
+                request,
+                client_address,
+                self,
+                directory=module_dir,
+            )
 
     addr = ("127.0.0.1", 8000)
     with ModuleServer(addr, SimpleHTTPRequestHandler) as httpd:
