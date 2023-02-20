@@ -7,13 +7,16 @@ PARAMETERS_FILE := parameters.json
 BUCKET ?= cf-templates-1491x2vk47ot9-eu-west-1
 STACK_NAME ?= private-terraform-registry
 
-.PHONY: clean deploy acceptance_test undeploy
+.PHONY: clean deploy acceptance_test undeploy lint
 
 ${BUILD_DIR}:
 	mkdir -p ${BUILD_DIR}
 
 ${BUILD_DIR}/${BUILT_TEMPLATE}: | ${BUILD_DIR}
-	aws cloudformation package --template "${TEMPLATE}" --s3-bucket "${BUCKET}" --output-template-file "$@"
+	aws cloudformation package \
+		--template "${TEMPLATE}" \
+		--s3-bucket "${BUCKET}" \
+		--output-template-file "$@"
 
 deploy: ${BUILD_DIR}/${BUILT_TEMPLATE}
 	aws cloudformation deploy \
@@ -31,4 +34,7 @@ clean: undeploy
 	rm -r ${BUILD_DIR}
 
 acceptance_test: deploy
-	pytest
+	pytest tests/integration
+
+lint:
+	echo "Not Implemented"
