@@ -6,8 +6,8 @@ import pytest
 
 
 @pytest.fixture()
-def module_server(request):
-    module_dir = request.path.parent / "data" / "terraform_module_source"
+def module_server(request, shared_datadir):
+    module_dir = shared_datadir / "terraform_module_source"
 
     class ModuleServer(HTTPServer):
         def finish_request(self, request, client_address):
@@ -24,7 +24,7 @@ def module_server(request):
 
 
 class TestTerraformRegistryIntegration:
-    def test_source_upstream_module(self, request, module_server):
-        terraform_dir = request.path.parent / "data" / "terraform"
+    def test_source_upstream_module(self, shared_datadir, module_server):
+        terraform_dir = shared_datadir / "terraform"
         terraform_init = f"terraform -chdir={terraform_dir} init -input=false".split()
         assert run(terraform_init).returncode == 0
