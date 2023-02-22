@@ -37,4 +37,4 @@ acceptance_test: deploy
 	pytest tests/integration
 
 lint:
-	echo "Not Implemented"
+	@echo "Not Implemented"
