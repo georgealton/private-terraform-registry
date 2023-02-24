@@ -9,6 +9,9 @@ permissions:
   id-token: write
   contents: read
 
+env:
+  FORCE_COLOR: 1
+
 jobs:
   test:
     runs-on: ubuntu-latest

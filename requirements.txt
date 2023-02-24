@@ -1,6 +1,8 @@
 pytest
 pytest-sugar
 pytest-datadir
+pytest-xdist
+
 requests
 black
 isort

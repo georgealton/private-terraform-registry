@@ -34,7 +34,7 @@ clean: undeploy
 	rm -r ${BUILD_DIR}
 
 acceptance_test: deploy
-	pytest tests/integration
+	pytest -n auto tests/integration
 
 lint:
 	@echo "Not Implemented"
