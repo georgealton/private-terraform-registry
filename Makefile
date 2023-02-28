@@ -1,7 +1,7 @@
 BUILD_DIR := .build
 
-TEMPLATE := template.yaml
-BUILT_TEMPLATE := packaged.yaml
+TEMPLATE := template.cfn.yaml
+BUILT_TEMPLATE := packaged.cfn.yaml
 PARAMETERS_FILE := parameters.json
 
 BUCKET ?= cf-templates-1491x2vk47ot9-eu-west-1
@@ -41,4 +41,4 @@ lint:
 
 fmt:
 	npx prettier --prose-wrap always --write *.md
-	rain fmt --write template.yaml
+	rain fmt --write "${TEMPLATE}"
