@@ -1,25 +1,22 @@
-Transform: AWS::Serverless-2016-10-31
-
 Parameters:
   ParentDomain:
-    Type: String
     Description: Your domain name, eh megacorp.com
+    Type: String
 
   DomainName:
-    Type: String
     Description: name of subdomain for registry, eg terraform
+    Type: String
 
   CertificateARN:
+    Description: |
+      If you already have a certificate in AWS Certificate Manager that covers the DomainName supply the ARN here. This will skip creation of a new certificate.
     Type: String
-    Description: >
-      If you already have a certificate in AWS Certificate Manager that covers the DomainName supply the ARN here. This will skip creation
-      of a new certificate.
     Default: ""
 
   APIEndpointType:
-    Type: String
-    Description: >
+    Description: |
       REGIONAL or EDGE . When using EDGE, the Certificate must be located in us-east-1. Either deploy the entire stack in us-east-1 or pass in the arn of a certificate in us-east-1.
+    Type: String
     AllowedValues:
       - REGIONAL
       - EDGE
@@ -31,8 +28,12 @@ Parameters:
 
 Conditions:
   CreateCertificate: !Equals [!Ref CertificateARN, ""]
+
   RegionalAPIEndpoint: !Equals [!Ref APIEndpointType, REGIONAL]
+
   SAMLIdP: !Not [!Equals [!Ref SAMLMetadataURL, ""]]
+
+Transform: AWS::Serverless-2016-10-31
 
 Resources:
   Storage:
@@ -80,29 +81,29 @@ Resources:
         PointInTimeRecoveryEnabled: true
 
   Certificate:
-    Condition: CreateCertificate
     Type: AWS::CertificateManager::Certificate
     Properties:
       DomainName: !Sub ${DomainName}.${ParentDomain}
       ValidationMethod: DNS
+    Condition: CreateCertificate
 
   API:
+    Type: AWS::Serverless::Api
     DependsOn:
       - Role
       - WebHookRole
-    Type: AWS::Serverless::Api
     Properties:
       Domain:
         CertificateArn: !Ref Certificate
         DomainName: !Sub ${DomainName}.${ParentDomain}
-        HostedZoneName: !Ref ParentDomain 
+        HostedZoneName: !Ref ParentDomain
       StageName: main
       EndpointConfiguration:
         Type: !Ref APIEndpointType
       DisableExecuteApiEndpoint: true
       MethodSettings:
         - ResourcePath: /*
-          HttpMethod: "*"
+          HttpMethod: '*'
           DataTraceEnabled: true
           LoggingLevel: ERROR
       Variables:
@@ -238,7 +239,7 @@ Resources:
         - email
         - openid
       SupportedIdentityProviders:
-        - !If [SAMLIdP, !Ref SAMLIdentityProvider, !Ref AWS::NoValue]
+        - !If [SAMLIdP, !Ref SAMLIdentityProvider, !Ref 'AWS::NoValue']
 
   VCSClient:
     Type: AWS::Cognito::UserPoolClient
@@ -247,7 +248,6 @@ Resources:
       ClientName: VCS_CLIENT
 
   SAMLIdentityProvider:
-    Condition: SAMLIdP
     Type: AWS::Cognito::UserPoolIdentityProvider
     Properties:
       ProviderName: SAMLIdentityProvider
@@ -256,7 +256,8 @@ Resources:
       ProviderDetails:
         MetadataURL: !Ref SAMLMetadataURL
       AttributeMapping:
-        email: "Attribute"
+        email: Attribute
+    Condition: SAMLIdP
 
   UserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain

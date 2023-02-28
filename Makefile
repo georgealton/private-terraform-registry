@@ -38,3 +38,7 @@ acceptance_test: deploy
 
 lint:
 	@echo "Not Implemented"
+
+fmt:
+	npx prettier --prose-wrap always --write *.md
+	rain fmt --write template.yaml

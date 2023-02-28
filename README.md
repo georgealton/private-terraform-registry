@@ -1,22 +1,28 @@
 # Private Terraform Registry
 
-An extensible, self hosted, private terraform registry without the expense of terraform cloud.
+An extensible, self hosted, private terraform registry without the expense of
+terraform cloud.
 
 Why would I want a module registry?
 
 ## Version Management
 
-You can reference modules using `github.com/georgealton/example?ref=v1.0.0` but terraform won't be able to perform version management here. Dependabot should be able to do this too.
+You can reference modules using `github.com/georgealton/example?ref=v1.0.0` but
+terraform won't be able to perform version management here. Dependabot should be
+able to do this too.
 
 ## Discoverability
 
-If all your modules are in git repositories they can be hard to discover a private registry makes them easier to browse and discover
+If all your modules are in git repositories they can be hard to discover a
+private registry makes them easier to browse and discover
 
 ## Adaptability
 
-Centralizing the location of your modules means that they're abstracted away from the VCS provider.
+Centralizing the location of your modules means that they're abstracted away
+from the VCS provider.
 
-Terraform 0.11 and above support [Private Module Registries][module-registry-protocol].
+Terraform 0.11 and above support [Private Module
+Registries][module-registry-protocol].
 
 [publishing-private-modules]
 
@@ -28,7 +34,8 @@ Terraform 0.11 and above support [Private Module Registries][module-registry-pro
 
 use well known resource arns over imports
 
-- though breaks the dependency graph trade off is open api spec not coupled to CloudFormation -- Can supply iac in any format
+- though breaks the dependency graph trade off is open api spec not coupled to
+  CloudFormation -- Can supply iac in any format
 
 ## Registry Protocol
 
@@ -44,8 +51,9 @@ X-Terraform-Get: https://api.github.com/repos/hashicorp/terraform-aws-consul/tar
 
 ### Provider vs System
 
-Terraform documentation uses provider and system for a module interchangeably. I've opted to use provider
-because that seems more common in terraform nomenclature.
+Terraform documentation uses provider and system for a module interchangeably.
+I've opted to use provider because that seems more common in terraform
+nomenclature.
 
 ## Terraform needs the values to be lowercase
 
@@ -76,7 +84,8 @@ Browse and Discover Terraform modules that exist in your registry.
 TF_TOKEN_terraform_georgealton_com="_TOKEN_"
 ```
 
-using the value from the `.terraformrc` or environment variable terraform put the value into `Authorization: Bearer <value>`
+using the value from the `.terraformrc` or environment variable terraform put
+the value into `Authorization: Bearer <value>`
 
 ## Module Registration
 
@@ -161,7 +170,8 @@ must follow
   - create all versions from tags
 - When new tag is added create new version
 
-Resources to connect your private module registry with a GitHub Account or Organization.
+Resources to connect your private module registry with a GitHub Account or
+Organization.
 
 ### Storage Backend
 
@@ -178,11 +188,13 @@ Q. Is separate Storage Backend Necessary? Can we rely on VCS access?
 
 ## ADR
 
-We will store [ADR](./docs/adr/) to record major key architectural decisions made with this project.
+We will store [ADR](./docs/adr/) to record major key architectural decisions
+made with this project.
 
 ## Using State machine for API
 
-experimented with VTL but became tricky to use with advanced use case, difficult to extend and modify. It also enables use of the built in JWT authorizer.
+experimented with VTL but became tricky to use with advanced use case, difficult
+to extend and modify. It also enables use of the built in JWT authorizer.
 
 switched to SFN instead.
 
@@ -193,17 +205,20 @@ switched to SFN instead.
 
 ## User Access
 
-Users should be able to browse the registry
-Don't want to manage Identity, so should only support federation via SAML/OAUTH from an IdP
+Users should be able to browse the registry Don't want to manage Identity, so
+should only support federation via SAML/OAUTH from an IdP
 
 <https://www.samltool.com/sp_metadata.php>
 
 ##  Docs
 
 [webhooks]: https://webhook.site/41eda23e-69ad-4fc7-8193-d888231a152d
-[publishing-private-modules]: https://www.terraform.io/cloud-docs/registry/publish-modules#publishing-private-modules-to-the-terraform-cloud-private-registry
-[preparing-a-module-repository]: https://www.terraform.io/cloud-docs/registry/publish-modules#preparing-a-module-repository
-[module-registry-protocol]: https://www.terraform.io/internals/module-registry-protocol
+[publishing-private-modules]:
+  https://www.terraform.io/cloud-docs/registry/publish-modules#publishing-private-modules-to-the-terraform-cloud-private-registry
+[preparing-a-module-repository]:
+  https://www.terraform.io/cloud-docs/registry/publish-modules#preparing-a-module-repository
+[module-registry-protocol]:
+  https://www.terraform.io/internals/module-registry-protocol
 [registry-api]: https://www.terraform.io/registry/api-docs
 [s3-bucket-source]: https://www.terraform.io/language/modules/sources#s3-bucket
 [module-structure]: https://www.terraform.io/language/modules/develop/structure
