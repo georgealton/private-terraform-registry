@@ -53,8 +53,16 @@ def github_organization(request):
         "agreed_to_terms": "yes",
     }
 
-    response = requests.post(url, data=data, cookies=cookies)
-
+    requests.post(url, data=data, cookies=cookies)
+    yield
+    requests.delete(
+        f"https://api.github.com/orgs/{organization_name}",
+        headers={
+            "Accept": "application/vnd.github+json",
+            "Authorization": "Bearer <YOUR-TOKEN>",
+            "X-GitHub-Api-Version": "2022-11-28"
+        },
+    )
 
 def db_connection():
     table = "..."
